@@ -14,7 +14,7 @@ Please download the data from https://drive.google.com/drive/u/3/folders/1QNJdPd
 
 # Results:
 
-![image](im1.png)
+![image](im3.png)
 Figure. Genomaps of 100 cells belonging to 10 different classes from Tabula Muris dataset. Each row in the figure corresponds to a class. For each class, the 10 cells show very similar patterns of genomap. Here, the smallest value in genomaps is denoted by blue and the largest value is denoted by yellow.
 
 
