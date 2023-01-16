@@ -34,6 +34,7 @@ from sklearn.manifold import TSNE
 from pyclustering.cluster.xmeans import xmeans
 from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from pyclustering.cluster import cluster_visualizer
+from sklearn.feature_selection import VarianceThreshold
 
 from genoNet import geneDataset,_get_device,load_genoNet,predict,traingenoNet,rescale
 from genomap import construct_genomap
@@ -56,14 +57,28 @@ torch.use_deterministic_algorithms(True)
 # idxVX=np.flip(idxV)
 # dataReduced=dataFull[:,idxVX[0:numGene]]
 
-data = pd.read_csv('data/TMdata.csv', header=None,
+data = pd.read_csv('data/TM_data.csv', header=None,
                    delim_whitespace=False)
 
 # Creation of genomaps
 # Selection of row and column number of the genomaps 
 # To create square genomaps, the row and column numbers are set to be the same.
-colNum=33 
-rowNum=33
+colNum=31
+rowNum=31
+n=rowNum*colNum # Total number of pixels in genomaps
+
+
+
+# When the dataset has more genes than number of pixels in the desired genomap,
+# select the first n most variable genes
+if n<data.shape[1]:
+    # create an instance of the VarianceThreshold class
+    selector = VarianceThreshold()
+    # fit the selector to the data and get the indices of the top n most variable features
+    var_threshold = selector.fit(data)
+    top_n_indices = var_threshold.get_support(indices=True)
+    top_n_features=data.columns[top_n_indices[0:n]]
+    data=data[top_n_features]
 # Normalization of the data
 dataNorm=scipy.stats.zscore(data,axis=0,ddof=1)
 # Construction of genomaps
