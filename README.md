@@ -8,6 +8,12 @@ torch, torchvision, scipy, scikit-learn, pyclustering, pot, phate, pandas, openc
 
 If you face any issue with packages, please check our Code-Ocean capsule, where you can check the package versions.
 
+# How to use genomap
+
+The data should be in cellxgene format. Genomap construction needs only one parameter: size of the genomap (row and column number). The row and column number can be any number starting from 1. You can create square or rectangular genomaps. The number of genes in your dataset does not need to be equal to the number of grid points in the genomap. Therefore, try genomaps of different sizes and see the patterns of your data. Genomap construction is very fast and you should get the genomaps within a few seconds. 
+
+Please run main.py or the Jupyter notebook genoMapDemo.ipynb. You can also run our Code Ocean capsule and create all the results with a single clink! ENJOY!
+
 # Data
 
 Please download the data from https://drive.google.com/drive/u/3/folders/1QNJdPdXf1lfq0Mu5p5JrzMDhwJJCwgO7
