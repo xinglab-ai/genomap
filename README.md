@@ -18,6 +18,10 @@ Please run main.py or the Jupyter notebook genoMapDemo.ipynb. You can also run o
 
 Please download the data from https://drive.google.com/drive/u/3/folders/1QNJdPdXf1lfq0Mu5p5JrzMDhwJJCwgO7
 
+# Citation
+
+If you use the code or the data, please cite our Nature Communications paper ('Cartography of Genomic Interactions Enables Deep Analysis of Single-Cell Expression Data', by Md Tauhidul Islam and Lei Xing, Nature Communications, 2023).
+
 # Results:
 
 ![image](im3.png)
