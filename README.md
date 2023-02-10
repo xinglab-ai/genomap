@@ -20,7 +20,9 @@ Please download the data from https://drive.google.com/drive/u/3/folders/1QNJdPd
 
 # Citation
 
-If you use the code or the data, please cite our Nature Communications paper ('Cartography of Genomic Interactions Enables Deep Analysis of Single-Cell Expression Data', by Md Tauhidul Islam and Lei Xing, Nature Communications, 2023).
+If you use the code or the data, please cite our Nature Communications paper: https://www.nature.com/articles/s41467-023-36383-6
+
+Islam, M.T., Xing, L. Cartography of Genomic Interactions Enables Deep Analysis of Single-Cell Expression Data. Nat Commun 14, 679 (2023). https://doi.org/10.1038/s41467-023-36383-6
 
 # Results:
 
