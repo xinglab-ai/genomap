@@ -1,7 +1,7 @@
 torch
 torchvision
 scipy
-scikit-learnpyclusteringpot
+scikit-learnpyclusteringpot; python_version >= '3.7'
 phate
 pandas
 opencv-python-headless
