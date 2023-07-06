@@ -26,8 +26,15 @@ jobs:
       - name: Build distribution package
         run: python setup.py sdist bdist_wheel
 
-      - name: Publish to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          username: __token__
-          password: ${{ secrets.TESTPYPI_TOKEN }}
+      # - name: Publish to TestPyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     username: __token__
+      #     password: ${{ secrets.TESTPYPI_TOKEN }}
+      - name: Upload to TestPyPI
+        run: |
+          python3 -m twine upload dist/*
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TESTPYPI_TOKEN }}
+          TWINE_REPOSITORY: testpypi
