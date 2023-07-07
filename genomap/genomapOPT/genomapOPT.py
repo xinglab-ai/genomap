@@ -12,7 +12,7 @@ author: anonymous
 # License: MIT License
 
 import numpy as np
-from bregman_genomap import sinkhorn
+from genomap.bregman_genomap import sinkhorn
 import ot
 
 

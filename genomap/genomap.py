@@ -14,8 +14,7 @@ Construction of genomaps
 
 import numpy as np
 import sklearn.metrics as mpd
-from genomapOPT import create_space_distributions
-from genomapOPT import gromov_wasserstein_adjusted_norm
+from genomap.genomapOPT import create_space_distributions, gromov_wasserstein_adjusted_norm
 
 def createMeshDistance(rowNum,colNum):
     """

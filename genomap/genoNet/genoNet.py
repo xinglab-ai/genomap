@@ -74,6 +74,9 @@ class genoNet(nn.Module):
 
         return x
     
+def get_device():
+    return _get_device()
+
 def _get_device():
     # help function to detect whether the computer has a GPU
     device = 'cpu'
