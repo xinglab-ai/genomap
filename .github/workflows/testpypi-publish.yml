@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: 3.x
 
-      - name: Install dependencies
+      - name: Install build  dependencies
         run: python -m pip install --upgrade pip setuptools wheel twine
           
       - name: Install project dependencies
@@ -28,8 +28,7 @@ jobs:
         run: python setup.py sdist bdist_wheel
 
       - name: Upload to TestPyPI
-        run: |
-          python3 -m twine upload dist/*
+        run: python3 -m twine upload dist/*
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.TESTPYPI_TOKEN }}
