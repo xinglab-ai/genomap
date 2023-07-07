@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="test-vasudha-genomap",
-    version="0.0.12",
+    version="0.0.13",
     author="Vasudha Jha",
     author_email="reachvasudha27@gmail.com",
     description="Create images from gene expression data",
