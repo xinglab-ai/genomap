@@ -21,7 +21,7 @@ import scipy
 import scipy.io as sio
 import numpy as np
 import scipy.io as sio
-import genoNet as gNet
+import genomap.genoNet as gNet
 import os
 import torch
 from torch.utils.data import DataLoader, Dataset
@@ -36,7 +36,7 @@ from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from pyclustering.cluster import cluster_visualizer
 from sklearn.feature_selection import VarianceThreshold
 
-from genoNet import geneDataset,_get_device,load_genoNet,predict,traingenoNet,rescale
+from genomap.genoNet import geneDataset, get_device, load_genoNet, predict, traingenoNet, rescale
 from genomap import construct_genomap
 
 # For reproducibility
@@ -135,7 +135,7 @@ net = gNet.traingenoNet(XTrain, yTrain, maxEPOCH=150, batchSize=miniBatchSize, v
 # Process the test data
 testset = gNet.geneDataset(XTest, yTest)
 testloader = gNet.DataLoader(testset, batch_size=miniBatchSize, shuffle=False)
-device = gNet._get_device()
+device = gNet.get_device()
 
 # Perform cell classification/reocognition
 prob_test = gNet.predict(net, testloader, device)
@@ -290,7 +290,7 @@ net = load_genoNet([1,27,27], 20, 'data/genoNet_PHATE_ZF.pt')
 # Extract genoNet features from the final fully connected layer
 # for PHATE analysis. 
 gx=np.reshape(XTrain,(XTrain.shape[0],1,XTrain.shape[2],XTrain.shape[3]))
-device = _get_device()
+device = get_device()
 t = torch.from_numpy(gx).to(device)
 net=net.double()
 dataAtFC=net.forwardX(t)
@@ -388,7 +388,7 @@ miniBatchSize = 128
 net = load_genoNet([1,33,33], 19, 'data/genoNet_TSNE_ComClass.pt')
 # Extract genoNet features from the final fully connected layer
 gx=np.reshape(XTrain,(XTrain.shape[0],1,XTrain.shape[2],XTrain.shape[3]))
-device = _get_device()
+device = get_device()
 t = torch.from_numpy(gx).to(device)
 net=net.double()
 dataAtFC=net.forwardX(t)
