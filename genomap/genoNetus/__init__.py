@@ -1,1 +1,0 @@
-from .genoNetus import *
