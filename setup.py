@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="test-vasudha-genomap",
-    version="0.0.14",
+    version="0.0.15",
     author="Vasudha Jha",
     author_email="reachvasudha27@gmail.com",
     description="Genomap converts tabular gene expression data into spatially meaningful images.",
