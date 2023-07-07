@@ -21,7 +21,7 @@ import scipy
 import scipy.io as sio
 import numpy as np
 import scipy.io as sio
-import genomap.genoNet as gNet
+import genomap.genoNet.genoNet as gNet
 import os
 import torch
 from torch.utils.data import DataLoader, Dataset
@@ -36,13 +36,12 @@ from pyclustering.cluster.center_initializer import kmeans_plusplus_initializer
 from pyclustering.cluster import cluster_visualizer
 from sklearn.feature_selection import VarianceThreshold
 
-from genomap.genoNet import geneDataset, get_device, load_genoNet, predict, traingenoNet, rescale
+from genomap.genoNet.genoNet import geneDataset, get_device, load_genoNet, predict, traingenoNet, rescale
 from genomap import construct_genomap
 
 # For reproducibility
 torch.manual_seed(1)
 torch.use_deterministic_algorithms(True)
-
 
 # First, we load the TM data. Data should be in cells X genes format, 
 # i.e., each row should correspond to gene expressions of a cell and each column
@@ -63,26 +62,24 @@ data = pd.read_csv('data/TM_data.csv', header=None,
 # Creation of genomaps
 # Selection of row and column number of the genomaps 
 # To create square genomaps, the row and column numbers are set to be the same.
-colNum=31
-rowNum=31
-n=rowNum*colNum # Total number of pixels in genomaps
-
-
+colNum = 31
+rowNum = 31
+n = rowNum * colNum # Total number of pixels in genomaps
 
 # When the dataset has more genes than number of pixels in the desired genomap,
 # select the first n most variable genes
-if n<data.shape[1]:
+if n < data.shape[1]:
     # create an instance of the VarianceThreshold class
     selector = VarianceThreshold()
     # fit the selector to the data and get the indices of the top n most variable features
     var_threshold = selector.fit(data)
     top_n_indices = var_threshold.get_support(indices=True)
-    top_n_features=data.columns[top_n_indices[0:n]]
-    data=data[top_n_features]
+    top_n_features = data.columns[top_n_indices[0:n]]
+    data = data[top_n_features]
 # Normalization of the data
-dataNorm=scipy.stats.zscore(data,axis=0,ddof=1)
+dataNorm = scipy.stats.zscore(data, axis=0, ddof=1)
 # Construction of genomaps
-genoMaps=construct_genomap(dataNorm,rowNum,colNum,epsilon=0.0,num_iter=200)
+genoMaps = construct_genomap(dataNorm, rowNum, colNum, epsilon=0.0, num_iter=200)
 
 # Visualization of the constructed genomaps:
 # The "genoMaps" array: All the constructed genomaps are saved in the array. This 
@@ -90,7 +87,7 @@ genoMaps=construct_genomap(dataNorm,rowNum,colNum,epsilon=0.0,num_iter=200)
 # The second and third ones denote the row and column number in a genomap.
 # The fourth index is introduced to facillitate the caclulation using Pytorch or Tensorflow  
 # to visualize  the i-th genomap, set the first index variable to i (i=10 here) 
-findI=genoMaps[10,:,:,:]
+findI = genoMaps[10,:,:,:]
 plt.figure(1)
 plt.imshow(findI, origin = 'lower',  extent = [0, 10, 0, 10], aspect = 1)
 plt.title('Genomap of a cell from TM dataset')
@@ -156,25 +153,25 @@ print('Classification accuracy of genomap+genoNet for TM dataset:'+str(np.sum(pr
 # In Seurat, the parameter 'nfeatures' (denoting  the number of features) is set
 # to 2000. The resulting Seurat output is loaded here
 data = sio.loadmat('data/outSeurat_pancORG.mat')
-outSeurat=data['outSeurat']
+outSeurat = data['outSeurat']
 
 # We now create a genomap for each cell in the data
 # We select the nearest square number to 2000, which is 1936
 # Thus the size of the genomap would be 44 by 44.
 # Next, let us select data with 1936 most variable features 
-numRow=44
-numCol=44
-varX=np.var(outSeurat,axis=0)
-idxV=np.argsort(varX)
-idxVX=np.flip(idxV)
-outSeurat1936=outSeurat[:,idxVX[0:numRow*numCol]]
+numRow = 44
+numCol = 44
+varX = np.var(outSeurat,axis=0)
+idxV = np.argsort(varX)
+idxVX = np.flip(idxV)
+outSeurat1936 = outSeurat[:,idxVX[0:numRow*numCol]]
 
 # Construction of the genomaps for the pancreatic data from the five different technologies
-genoMaps=construct_genomap(outSeurat1936,numRow,numCol,epsilon=0.0,num_iter=200)
+genoMaps = construct_genomap(outSeurat1936,numRow,numCol,epsilon=0.0,num_iter=200)
 
 
 # Visualize a genomap (we show here the first one (i=0))
-findI=genoMaps[0,:,:,:]
+findI = genoMaps[0,:,:,:]
 plt.figure(4)
 plt.imshow(findI, origin = 'lower',  extent = [0, 10, 0, 10], aspect = 1)
 plt.title('Genomap of a cell from pancreatic dataset')
@@ -292,9 +289,9 @@ net = load_genoNet([1,27,27], 20, 'data/genoNet_PHATE_ZF.pt')
 gx=np.reshape(XTrain,(XTrain.shape[0],1,XTrain.shape[2],XTrain.shape[3]))
 device = get_device()
 t = torch.from_numpy(gx).to(device)
-net=net.double()
-dataAtFC=net.forwardX(t)
-data=dataAtFC.cpu().detach().numpy()
+net = net.double()
+dataAtFC = net.forwardX(t)
+data = dataAtFC.cpu().detach().numpy()
 
 # Run PHATE on the genoNet features
 phate_op = phate.PHATE(random_state=1)
@@ -302,7 +299,7 @@ X_embedded = phate_op.fit_transform(data)
 
 # Plot embeddings
 plt.figure(11)
-scatter=plt.scatter(X_embedded[:,0], X_embedded[:,1],s=2,c=GrTruth,cmap="jet")
+scatter = plt.scatter(X_embedded[:,0], X_embedded[:,1],s=2,c=GrTruth,cmap="jet")
 plt.xlabel("PHATE1")
 plt.ylabel("PHATE2")
 plt.title('PHATE embedding of genoNet features')
@@ -315,7 +312,7 @@ X_embedded = phate_op.fit_transform(dataVec)
 
 # Plot embeddings
 plt.figure(12)
-scatter=plt.scatter(X_embedded[:,0], X_embedded[:,1],s=2,c=GrTruth,cmap="jet")
+scatter = plt.scatter(X_embedded[:,0], X_embedded[:,1],s=2,c=GrTruth,cmap="jet")
 plt.xlabel("PHATE1")
 plt.ylabel("PHATE2")
 plt.title('PHATE embedding of raw data')
@@ -390,8 +387,8 @@ net = load_genoNet([1,33,33], 19, 'data/genoNet_TSNE_ComClass.pt')
 gx=np.reshape(XTrain,(XTrain.shape[0],1,XTrain.shape[2],XTrain.shape[3]))
 device = get_device()
 t = torch.from_numpy(gx).to(device)
-net=net.double()
-dataAtFC=net.forwardX(t)
+net = net.double()
+dataAtFC = net.forwardX(t)
 
 # Run t-SNE on the genoNet features
 X=dataAtFC.cpu().detach().numpy()
