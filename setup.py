@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="genomap",
-    version="1.0.2",
+    version="1.0.3",
     author="Md Tauhidul Islam",
     author_email="tauhid@stanford.edu",
     description="Genomap converts tabular gene expression data into spatially meaningful images.",
@@ -17,7 +17,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     packages=find_packages(exclude=("genomap.genoNet", "genomap.genoNetus")),
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     install_requires=open("requirements.txt").readlines(),
     include_package_data=True,
 )
