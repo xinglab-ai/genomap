@@ -4,10 +4,10 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="test-vasudha-genomap",
-    version="0.0.17",
-    author="Vasudha Jha",
-    author_email="reachvasudha27@gmail.com",
+    name="genomap",
+    version="1.0.0",
+    author="Md Tauhidul Islam",
+    author_email="tauhid@stanford.edu",
     description="Genomap converts tabular gene expression data into spatially meaningful images.",
     long_description=long_description,
     long_description_content_type="text/markdown",

@@ -12,6 +12,10 @@ If you face any issues with packages, please check the environment section of ou
 
 The data should be in cell (row) x gene (column) format. Genomap construction needs only one parameter: the size of the genomap (row and column number). The row and column number can be any number starting from 1. You can create square or rectangular genomaps. The number of genes in your dataset should be less than or equal to the number of pixels in the genomap. Genomap construction is very fast and you should get the genomaps within a few seconds.
 
+# Sample data
+
+To run the example code below, you will need to download the required data file. You can download it from [here](https://drive.google.com/file/d/1kkbI9_6zD80Jr5OhMkGlcdMOeWcRfz7b/view?usp=drive_link).
+
 # Example code
 
 ```python
@@ -44,7 +48,7 @@ plt.title('Genomap of a cell from TM dataset')
 
 # Citation
 
-If you use the code or the data, please cite our Nature Communications paper: https://www.nature.com/articles/s41467-023-36383-6
+If you use the genomap code, please cite our Nature Communications paper: https://www.nature.com/articles/s41467-023-36383-6
 
 Islam, M.T., Xing, L. Cartography of Genomic Interactions Enables Deep Analysis of Single-Cell Expression Data. Nat Commun 14, 679 (2023). https://doi.org/10.1038/s41467-023-36383-6
 
