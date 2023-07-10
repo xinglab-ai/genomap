@@ -2,7 +2,7 @@ name: Publish to PyPI
 
 on:
   workflow_run:
-    workflows: ["Release"]
+    workflows: ["Create GitHub Release"]
     types: [completed]
     branches: [main]
 
