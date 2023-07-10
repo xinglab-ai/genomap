@@ -1,10 +1,13 @@
-name: Deploy to TestPyPI
+name: Publish to PyPI
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
@@ -27,9 +30,15 @@ jobs:
       - name: Build distribution package
         run: python setup.py sdist bdist_wheel
 
-      - name: Upload to TestPyPI
+      # - name: Upload to TestPyPI
+      #   run: python3 -m twine upload dist/*
+      #   env:
+      #     TWINE_USERNAME: __token__
+      #     TWINE_PASSWORD: ${{ secrets.TESTPYPI_TOKEN }}
+      #     TWINE_REPOSITORY: testpypi
+
+      - name: Upload to PyPI
         run: python3 -m twine upload dist/*
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.TESTPYPI_TOKEN }}
-          TWINE_REPOSITORY: testpypi
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
