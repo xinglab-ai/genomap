@@ -1,14 +1,4 @@
-torch
-torchvision
 scipy
 scikit-learn
-pyclustering
 pot
-phate
-pandas
-opencv-python-headless
 numpy
-matplotlib
-jupyterlab
-jupyter
-grad-cam
