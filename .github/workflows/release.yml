@@ -14,5 +14,5 @@ jobs:
     steps:
       - uses: rymndhng/release-on-push-action@master
         with:
-          bump_version_scheme: major # can be either "major", "minor", "patch" or "norelease"
+          bump_version_scheme: patch # can be either "major", "minor", "patch" or "norelease"
           tag_prefix: v
