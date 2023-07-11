@@ -1,31 +1,57 @@
-# Genomap----Create images from gene expression data
+# Genomap creates images from gene expression data
 
-In this work, we develop an entropy-based cartography strategy to contrive the high dimensional gene expression data into a configured image format, referred to as genomap, with explicit integration of the genomic interactions. This unique cartography casts the gene-gene interactions into the spatial configuration of genomaps and enables us to extract the deep genomic interaction features and discover underlying discriminative patterns of the data. We show that, for a wide variety of applications (cell clustering and recognition, gene signature extraction, single cell data integration, cellular trajectory analysis, dimensionality reduction, and visualization), the proposed approach drastically improves the accuracies of data analyses as compared to the state-of-the-art techniques.
+Genomap is an entropy-based cartography strategy to contrive the high dimensional gene expression data into a configured image format with explicit integration of the genomic interactions. This unique cartography casts the gene-gene interactions into a spatial configuration and enables us to extract the deep genomic interaction features and discover underlying discriminative patterns of the data. For a wide variety of applications (cell clustering and recognition, gene signature extraction, single-cell data integration, cellular trajectory analysis, dimensionality reduction, and visualization), genomap drastically improves the accuracy of data analyses as compared to state-of-the-art techniques.
 
-# Required packages 
+# Required packages
 
-torch, torchvision, scipy, scikit-learn, pyclustering, pot, phate, pandas, opencv-python-headless, numpy, matplotlib, jupyterlab, jupyter, grad-cam
+scipy, scikit-learn, pot, numpy
 
-If you face any issue with packages, please check the environment section of our Code-Ocean capsule (https://doi.org/10.24433/CO.0640398.v1), where you can check the package versions.
+If you face any issues with packages, please check the environment section of our Code-Ocean capsule (https://doi.org/10.24433/CO.0640398.v1), where you can check the package versions.
 
 # How to use genomap
 
-The data should be in cell (row) x gene (column) format. Genomap construction needs only one parameter: size of the genomap (row and column number). The row and column number can be any number starting from 1. You can create square or rectangular genomaps. The number of genes in your dataset does not need to be equal to the number of grid points in the genomap. Therefore, try genomaps of different sizes and see the patterns of your data. Genomap construction is very fast and you should get the genomaps within a few seconds. 
+The data should be in cell (row) x gene (column) format. Genomap construction needs only one parameter: the size of the genomap (row and column number). The row and column number can be any number starting from 1. You can create square or rectangular genomaps. The number of genes in your dataset should be less than or equal to the number of pixels in the genomap. Genomap construction is very fast and you should get the genomaps within a few seconds.
 
-Please run main.py or the Jupyter notebook genoMapDemo.ipynb. You can also run our Code Ocean capsule (https://doi.org/10.24433/CO.0640398.v1) and create all the results with a single clink! ENJOY!
+# Sample data
 
-# Data
+To run the example code below, you will need to download the required data file. You can download it from [here](https://drive.google.com/file/d/1kkbI9_6zD80Jr5OhMkGlcdMOeWcRfz7b/view?usp=drive_link).
 
-Please download the data from https://drive.google.com/drive/u/3/folders/1QNJdPdXf1lfq0Mu5p5JrzMDhwJJCwgO7
+# Example code
+
+```python
+import pandas as pd # Please install pandas and matplotlib before you run this example
+
+import matplotlib.pyplot as plt
+
+import scipy
+
+import genomap as gp
+
+data = pd.read_csv('TM_data.csv', header=None, delim_whitespace=False)
+
+colNum=31 # Column number of genomap
+
+rowNum=31 # Row number of genomap
+
+dataNorm=scipy.stats.zscore(data,axis=0,ddof=1) # Normalization of the data
+
+genoMaps=gp.construct_genomap(dataNorm,rowNum,colNum) # Construction of genomaps
+
+findI=genoMaps[0,:,:,:]
+
+plt.figure(1) # Plot the first genomap
+
+plt.imshow(findI, origin = 'lower', extent = [0, 10, 0, 10], aspect = 1)
+
+plt.title('Genomap of a cell from TM dataset')
+```
 
 # Citation
 
-If you use the code or the data, please cite our Nature Communications paper ('Cartography of Genomic Interactions Enables Deep Analysis of Single-Cell Expression Data', by Md Tauhidul Islam and Lei Xing, Nature Communications, 2023).
+If you use the genomap code, please cite our Nature Communications paper: https://www.nature.com/articles/s41467-023-36383-6
 
-# Results:
+Islam, M.T., Xing, L. Cartography of Genomic Interactions Enables Deep Analysis of Single-Cell Expression Data. Nat Commun 14, 679 (2023). https://doi.org/10.1038/s41467-023-36383-6
 
-![image](im3.png)
-Figure. Genomaps of 100 cells belonging to 10 different classes from Tabula Muris dataset. Each row in the figure corresponds to a class. For each class, the 10 cells show very similar patterns of genomap. Here, the smallest value in genomaps is denoted by blue and the largest value is denoted by yellow.
 
 
 

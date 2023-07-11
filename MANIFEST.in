@@ -1,0 +1,8 @@
+include LICENSE
+include README.md
+
+exclude genomap/genoNet.py
+exclude genomap/genoNetus.py
+recursive-exclude * __pycache__
+recursive-include data/readme.txt
+include data/TM_data.csv
