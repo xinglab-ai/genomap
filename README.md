@@ -10,6 +10,11 @@ If you face any issues with packages, please check the environment section of ou
 
 # How to use genomap
 
+The easiest way to start with genomap is to install it from pypi using 
+
+```python
+pip install genomap
+```
 The data should be in cell (row) x gene (column) format. Genomap construction needs only one parameter: the size of the genomap (row and column number). The row and column number can be any number starting from 1. You can create square or rectangular genomaps. The number of genes in your dataset should be less than or equal to the number of pixels in the genomap. Genomap construction is very fast and you should get the genomaps within a few seconds.
 
 # Sample data
