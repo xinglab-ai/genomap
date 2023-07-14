@@ -8,7 +8,7 @@ Author:
 """
 
 from tensorflow.keras.models import Model
-from FcDEC import FcDEC
+from .FcDEC import FcDEC
 
 
 class FcIDEC(FcDEC):

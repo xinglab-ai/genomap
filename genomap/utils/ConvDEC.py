@@ -9,8 +9,7 @@ Author:
 from tensorflow.keras.layers import Conv2D, Conv2DTranspose, Dense, Flatten, Reshape, InputLayer
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from FcDEC import FcDEC, ClusteringLayer
-
+from .FcDEC import FcDEC, ClusteringLayer
 
 def CAE(input_shape=(28, 28, 1), filters=[32, 64, 128, 10]):
     model = Sequential()

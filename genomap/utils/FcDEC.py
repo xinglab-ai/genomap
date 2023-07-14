@@ -17,7 +17,7 @@ from tensorflow.keras import callbacks
 from tensorflow.keras.initializers import VarianceScaling
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.cluster import KMeans
-import metrics
+from .metrics import *
 
 
 def autoencoder(dims, act='relu'):
