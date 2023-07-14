@@ -5,15 +5,16 @@ Created on Wed Jul 12 15:14:53 2023
 @author: Windows
 """
 
-import phate
-import numpy as np
-from utils.class_discriminative_opt import ClassDiscriminative_OPT
-import scipy
-from utils.gTraj_utils import compute_cluster_distances, nearest_divisible_by_four
-from tensorflow.keras.optimizers import Adam
-from utils.ConvIDEC import ConvIDEC
-from sklearn.feature_selection import VarianceThreshold
+from genomap.utils.class_discriminative_opt import ClassDiscriminative_OPT
 from genomap.genomap import construct_genomap
+from genomap.utils.gTraj_utils import compute_cluster_distances, nearest_divisible_by_four
+from genomap.utils import ConvIDEC
+import numpy as np
+import phate
+import scipy
+from sklearn.feature_selection import VarianceThreshold
+from tensorflow.keras.optimizers import Adam
+
 # from gTraj_utils import nearest_divisible_by_four
 
 def apply_genoTraj(data, y_pred):
