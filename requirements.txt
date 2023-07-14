@@ -1,5 +1,6 @@
 anndata
 numpy
+phate
 pot
 scanpy
 scipy
