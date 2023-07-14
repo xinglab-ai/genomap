@@ -1,4 +1,9 @@
+anndata
+numpy
+pot
+scanpy
 scipy
 scikit-learn
-pot
-numpy
+tensorflow
+umap
+
