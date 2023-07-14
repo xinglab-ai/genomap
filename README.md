@@ -67,15 +67,15 @@ Y_time = np.squeeze(gt_data['newGT'])
 
 outGenoTraj=compute_genoTraj(data)
 
-dx = sio.loadmat('MOIdata/dataBaronX.mat')
+dx = sio.loadmat('dataBaronX.mat')
 data=dx['dataBaron']
-dx = sio.loadmat('MOIdata/dataMuraroX.mat')
+dx = sio.loadmat('dataMuraroX.mat')
 data2=dx['dataMuraro']
-dx = sio.loadmat('MOIdata/dataScapleX.mat')
+dx = sio.loadmat('dataScapleX.mat')
 data3=dx['dataScaple']
-dx = sio.loadmat('MOIdata/dataWangX.mat')
+dx = sio.loadmat('dataWangX.mat')
 data4=dx['dataWang']
-dx = sio.loadmat('MOIdata/dataXinX.mat')
+dx = sio.loadmat('dataXinX.mat')
 data5=dx['dataXin']
 
 resVis=compute_genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44)
