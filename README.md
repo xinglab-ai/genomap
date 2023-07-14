@@ -14,9 +14,9 @@ The data should be in cell (row) x gene (column) format. Genomap construction ne
 
 ## Sample data
 
-To run the example code below, you will need to download the required data file. You can download it from [here](https://drive.google.com/file/d/1kkbI9_6zD80Jr5OhMkGlcdMOeWcRfz7b/view?usp=drive_link).
+To run the example codes below, you will need to download data files from [here](https://drive.google.com/drive/folders/1xq3bBgVP0NCMD7bGTXit0qRkL8fbutZ6?usp=drive_link).
 
-## Example code
+## Example codes
 
 ### Example 1 - Construct a genomap
 
@@ -46,7 +46,9 @@ plt.title('Genomap of a cell from TM dataset')
 ```python
 import scipy.io as sio
 import numpy as np
-import genomap as gp
+from genomap.genoVis import compute_genoVis
+from genomap.genoTraj import compute_genoTraj
+from genomap.genoMOI import compute_genoMOI
 
 dx = sio.loadmat('reducedData_divseq.mat')
 data=dx['X']
@@ -55,7 +57,7 @@ y = np.squeeze(gt_data['GT'])
 n_clusters = len(np.unique(y))
 
 
-resVis=gp.genoVis(data,n_clusters=n_clusters, colNum=33,rowNum=33)
+resVis=compute_genoVis(data,n_clusters=n_clusters, colNum=33,rowNum=33)
 
 dx = sio.loadmat('organoidData.mat')
 data=dx['X3']
@@ -63,7 +65,7 @@ gt_data = sio.loadmat('cellsPsudo.mat')
 Y_time = np.squeeze(gt_data['newGT'])
 
 
-outGenoTraj=gp.genoTraj(data)
+outGenoTraj=compute_genoTraj(data)
 
 dx = sio.loadmat('MOIdata/dataBaronX.mat')
 data=dx['dataBaron']
@@ -76,7 +78,7 @@ data4=dx['dataWang']
 dx = sio.loadmat('MOIdata/dataXinX.mat')
 data5=dx['dataXin']
 
-resVis=gp.genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44)
+resVis=compute_genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44)
 ```
 
 # Citation
