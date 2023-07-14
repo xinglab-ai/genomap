@@ -6,12 +6,12 @@ Created on Wed Jul 12 16:11:15 2023
 """
 
 from tensorflow.keras.optimizers import Adam
-from genomap.ConvIDEC import ConvIDEC
+from utils.ConvIDEC import ConvIDEC
 from sklearn.feature_selection import VarianceThreshold
 from genomap.genomap import construct_genomap
 import umap
 # from gTraj_utils import nearest_divisible_by_four
-from genomap.gTraj_utils import nearest_divisible_by_four
+from utils.gTraj_utils import nearest_divisible_by_four
 import scanpy as sc
 import numpy as np
 import pandas as pd

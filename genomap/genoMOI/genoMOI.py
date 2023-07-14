@@ -6,14 +6,14 @@ Created on Wed Jul 12 16:11:15 2023
 """
 
 from tensorflow.keras.optimizers import Adam
-from genomap.ConvIDEC import ConvIDEC
+from utils.ConvIDEC import ConvIDEC
 # from ConvIDEC import ConvIDEC
 from sklearn.feature_selection import VarianceThreshold
 from genomap.genomap import construct_genomap
 import umap
-from genomap.gTraj_utils import nearest_divisible_by_four
+from utils.gTraj_utils import nearest_divisible_by_four
 # from gTraj_utils import nearest_divisible_by_four
-from genomap.utils_MOI import *
+from utils.utils_MOI import *
 # from utils_MOI import * 
 
 def compute_genoMOI(*arrays,n_clusters=None, colNum, rowNum):  
