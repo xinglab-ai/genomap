@@ -1,4 +1,5 @@
 anndata
+bbknn
 numpy
 phate
 pot
