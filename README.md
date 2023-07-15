@@ -56,12 +56,12 @@ from genomap.genoVis import compute_genoVis
 from genomap.genoTraj import compute_genoTraj
 from genomap.genoMOI import compute_genoMOI
 
-dx = sio.loadmat('reducedData_divseq.mat')
-data=dx['X']
-gt_data = sio.loadmat('GT_divseq.mat')
+data = pd.read_csv('TM_data.csv', header=None,
+                   delim_whitespace=False)
+data=data.values
+gt_data = sio.loadmat('GT_TM.mat')
 y = np.squeeze(gt_data['GT'])
 n_clusters = len(np.unique(y))
-
 
 resVis=compute_genoVis(data,n_clusters=n_clusters, colNum=33,rowNum=33)
 # Use resVis=compute_genoVis(data, colNum=32,rowNum=32), if you do not know the number
