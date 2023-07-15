@@ -118,6 +118,11 @@ dx = sio.loadmat('dataWangX.mat')
 data4=dx['dataWang']
 dx = sio.loadmat('dataXinX.mat')
 data5=dx['dataXin']
+# Load class and batch labels
+dx = sio.loadmat('classLabel.mat')
+y = np.squeeze(dx['classLabel'])
+dx = sio.loadmat('batchLabel.mat')
+ybatch = np.squeeze(dx['batchLabel'])
 
 # Apply genoMOI
 resVis=compute_genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44)
