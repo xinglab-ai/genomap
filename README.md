@@ -1,4 +1,4 @@
-# Genomap creates images from gene expression data and offers high-performance cell clustering and recognition, gene signature extraction, multi-omics data integration, cellular trajectory analysis, dimensionality reduction, and visualization
+# Genomap creates images from gene expression data and offers high-performance dimensionality reduction and visualization, cell clustering and recognition, gene signature extraction, multi-omics data integration and cellular trajectory analysis 
 
 Genomap is an entropy-based cartography strategy to contrive the high dimensional gene expression data into a configured image format with explicit integration of the genomic interactions. This unique cartography casts the gene-gene interactions into a spatial configuration and enables us to extract the deep genomic interaction features and discover underlying discriminative patterns of the data. For a wide variety of applications (cell clustering and recognition, gene signature extraction, single-cell data integration, cellular trajectory analysis, dimensionality reduction, and visualization), genomap drastically improves the accuracy of data analyses as compared to state-of-the-art techniques.
 
@@ -11,7 +11,7 @@ pip install genomap
 ```
 The data should be in cell (row) x gene (column) format. Genomap construction needs only one parameter: the size of the genomap (row and column number). The row and column number can be any number starting from 1. You can create square or rectangular genomaps. The number of genes in your dataset should be less than or equal to the number of pixels in the genomap. Genomap construction is very fast and you should get the genomaps within a few seconds. 
 
-Please run our Code-Ocean capsules (https://codeocean.com/capsule/4321565/tree/v1 and https://codeocean.com/capsule/0640398/tree) to create the results in a single click. Please check the environment section of the Code Ocean capsules if you face any issues with the packages.
+Please run our Code-Ocean capsules (https://codeocean.com/capsule/4321565/tree/v1 and https://codeocean.com/capsule/6967747/tree/v1) to create the results in a single click. Please check the environment section of the Code Ocean capsules if you face any issues with the packages.
 
 ## Sample data
 
