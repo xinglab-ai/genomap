@@ -104,7 +104,7 @@ plt.colorbar(h1)
 
 ```
 
-### Example 3 - Try genoMOI for multi-omic data integration
+### Example 4 - Try genoMOI for multi-omic data integration
 
 ```python
 
