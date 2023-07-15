@@ -46,7 +46,7 @@ plt.imshow(findI, origin = 'lower', extent = [0, 10, 0, 10], aspect = 1)
 plt.title('Genomap of a cell from TM dataset')
 ```
 
-### Example 2 - Try genoVis for data visualization and clustering , genoTraj and genoMOI
+### Example 2 - Try genoVis for data visualization and clustering
 
 ```python
 import scipy.io as sio
