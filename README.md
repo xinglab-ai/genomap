@@ -1,4 +1,4 @@
-# Genomap creates images from gene expression data
+# Genomap creates images from gene expression data and offers high-performance cell clustering and recognition, gene signature extraction, multi-omics data integration, cellular trajectory analysis, dimensionality reduction, and visualization
 
 Genomap is an entropy-based cartography strategy to contrive the high dimensional gene expression data into a configured image format with explicit integration of the genomic interactions. This unique cartography casts the gene-gene interactions into a spatial configuration and enables us to extract the deep genomic interaction features and discover underlying discriminative patterns of the data. For a wide variety of applications (cell clustering and recognition, gene signature extraction, single-cell data integration, cellular trajectory analysis, dimensionality reduction, and visualization), genomap drastically improves the accuracy of data analyses as compared to state-of-the-art techniques.
 
