@@ -46,7 +46,7 @@ plt.imshow(findI, origin = 'lower', extent = [0, 10, 0, 10], aspect = 1)
 plt.title('Genomap of a cell from TM dataset')
 ```
 
-### Example 2 - Try out genoVis, genoTraj and genoMOI
+### Example 2 - Try genoVis for data visualization and clustering , genoTraj and genoMOI
 
 ```python
 import scipy.io as sio
@@ -63,15 +63,51 @@ n_clusters = len(np.unique(y))
 
 
 resVis=compute_genoVis(data,n_clusters=n_clusters, colNum=33,rowNum=33)
+# Use resVis=compute_genoVis(data, colNum=32,rowNum=32), if you do not know the number
+# of classes in the data
 
+resVisEmb=resVis[0] # Dimensionality reduction and visualization result
+clusIndex=resVis[1] # Clustering result
+
+plt.figure(figsize=(15, 10))
+plt.rcParams.update({'font.size': 28})    
+h1=plt.scatter(resVisEmb[:, 0], resVisEmb[:, 1], c=y,cmap='jet', marker='o', s=18)     
+plt.xlabel('genoVis1')
+plt.ylabel('genoVis2')
+plt.tight_layout()
+plt.colorbar(h1)
+
+import metrics
+print('acc=%.4f, nmi=%.4f, ari=%.4f' % (metrics.acc(y, clusIndex), metrics.nmi(y, clusIndex), metrics.ari(y, clusIndex)))
+```
+
+### Example 3 - Try genoTraj for cell trajectory analysis
+
+```python
+# Load data
 dx = sio.loadmat('organoidData.mat')
 data=dx['X3']
 gt_data = sio.loadmat('cellsPsudo.mat')
 Y_time = np.squeeze(gt_data['newGT'])
 
-
+# Apply genoTraj for embedding showing cell trajectories
 outGenoTraj=compute_genoTraj(data)
 
+plt.figure(figsize=(15, 10))
+plt.rcParams.update({'font.size': 28})    
+h1=plt.scatter(outGenoTraj[:, 0], outGenoTraj[:, 1], c=Y_time,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+plt.xlabel('genoTraj1')
+plt.ylabel('genoTraj2')
+plt.tight_layout()
+plt.colorbar(h1)
+
+```
+
+### Example 3 - Try genoMOI for multi-omic data integration
+
+```python
+
+# Load datasets
 dx = sio.loadmat('dataBaronX.mat')
 data=dx['dataBaron']
 dx = sio.loadmat('dataMuraroX.mat')
@@ -83,7 +119,19 @@ data4=dx['dataWang']
 dx = sio.loadmat('dataXinX.mat')
 data5=dx['dataXin']
 
+# Apply genoMOI
 resVis=compute_genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44)
+
+# Visualize the integrated data using UMAP
+embedding = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(resVis) 
+
+plt.figure(figsize=(15, 10))
+plt.rcParams.update({'font.size': 28})    
+h1=plt.scatter(embedding[:, 0], embedding[:, 1], c=y,cmap='jet', marker='o', s=18)     
+plt.xlabel('UMAP')
+plt.ylabel('UMAP2')
+plt.tight_layout()
+plt.colorbar(h1)
 ```
 
 # Citation
