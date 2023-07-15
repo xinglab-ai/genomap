@@ -1,6 +1,7 @@
 anndata
 bbknn
 igraph
+louvain
 numpy
 phate
 pot
