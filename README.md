@@ -51,6 +51,7 @@ plt.title('Genomap of a cell from TM dataset')
 ```python
 import scipy.io as sio
 import numpy as np
+import metrics
 from genomap.genoVis import compute_genoVis
 from genomap.genoTraj import compute_genoTraj
 from genomap.genoMOI import compute_genoMOI
@@ -77,7 +78,7 @@ plt.ylabel('genoVis2')
 plt.tight_layout()
 plt.colorbar(h1)
 
-import metrics
+# Print clustering accuracy metrics
 print('acc=%.4f, nmi=%.4f, ari=%.4f' % (metrics.acc(y, clusIndex), metrics.nmi(y, clusIndex), metrics.ari(y, clusIndex)))
 ```
 
