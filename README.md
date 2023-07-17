@@ -1,4 +1,4 @@
-# Genomap creates images from gene expression data and offers high-performance dimensionality reduction and visualization, cell clustering and recognition, gene signature extraction, multi-omics data integration and cellular trajectory analysis 
+# Genomap creates images from gene expression data and offers high-performance dimensionality reduction and visualization, data clustering, classification and regression, gene signature extraction, multi-omics data integration, and trajectory analysis 
 
 Genomap is an entropy-based cartography strategy to contrive the high dimensional gene expression data into a configured image format with explicit integration of the genomic interactions. This unique cartography casts the gene-gene interactions into a spatial configuration and enables us to extract the deep genomic interaction features and discover underlying discriminative patterns of the data. For a wide variety of applications (cell clustering and recognition, gene signature extraction, single-cell data integration, cellular trajectory analysis, dimensionality reduction, and visualization), genomap drastically improves the accuracy of data analyses as compared to state-of-the-art techniques.
 
@@ -193,6 +193,77 @@ genoMaps,gene_namesRe,T=createGenomap_for_sig(data,gene_names,rowNum,colNum)
 result=genoSig(genoMaps,T,label,userPD,gene_namesRe, epochs=50)
 
 print(result.head())  
+```
+
+### Example 7 - Try genoClassification for tabular data classification
+
+```python
+import pandas as pd
+import numpy as np
+import scipy.io as sio
+from genoClassification import genoClassification
+from util_genoClassReg import select_random_values
+
+
+# First, we load the TM data. Data should be in cells X genes format, 
+data = pd.read_csv('TM_data.csv', header=None,
+                   delim_whitespace=False)
+
+# Creation of genomaps
+# Selection of row and column number of the genomaps 
+# To create square genomaps, the row and column numbers are set to be the same.
+colNum=33 
+rowNum=33
+
+# Load ground truth cell labels of the TM dataset
+gt_data = sio.loadmat('GT_TM.mat')
+GT = np.squeeze(gt_data['GT'])
+GT=GT-1 # to ensure the labels begin with 0 to conform with PyTorch
+
+# Select 80% of data randomly for training and others for testing
+indxTrain, indxTest= select_random_values(start=0, end=GT.shape[0], perc=0.8)
+groundTruthTest = GT[indxTest-1]
+
+training_data=data.values[indxTrain-1]
+training_labels=GT[indxTrain-1]
+test_data=data.values[indxTest-1]
+
+est=genoClassification(training_data, training_labels, test_data, rowNum=rowNum, colNum=colNum, epoch=150)
+
+print('Classification accuracy of genomap+genoNet:'+str(np.sum(est==groundTruthTest) / est.shape[0]))  
+```
+
+
+### Example 8 - Try genoRegression for tabular data regression
+
+```python
+import pandas as pd
+import numpy as np
+import scipy.io as sio
+from genoRegression import genoRegression
+from sklearn.metrics import mean_squared_error
+from util_genoClassReg import select_random_values
+
+# Load data and labels
+dx = sio.loadmat('../data/organoidData.mat')
+data=dx['X3']
+gt_data = sio.loadmat('../data/GT_Org.mat')
+Y_time = np.squeeze(gt_data['GT'])
+Y_time = Y_time - 1 # to ensure the labels begin with 0 to conform with PyTorch
+
+# Select 80% of data randomly for training and others for testing
+indxTrain, indxTest= select_random_values(start=0, end=Y_time.shape[0], perc=0.8)
+groundTruthTest = Y_time[indxTest-1]
+training_data=data[indxTrain-1]
+training_labels=Y_time[indxTrain-1]
+test_data=data[indxTest-1]
+
+# Run genoRegression
+est=genoRegression(training_data, training_labels, test_data, rowNum=40, colNum=40, epoch=200)
+
+# Calculate MSE
+mse = mean_squared_error(groundTruthTest, est)
+print(f'MSE: {mse}') 
 ```
 
 # Citation
