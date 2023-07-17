@@ -35,7 +35,7 @@ def apply_genoTraj(data, y_pred):
     data_phate = phate_op.fit_transform(ccifOutzc)
     return data_phate
 
-def compute_genoTraj(data,n_clusters = 33, colNum=32,rowNum=32,batch_size=64,verbose=1,
+def genoTraj(data,n_clusters = 33, colNum=32,rowNum=32,batch_size=64,verbose=1,
                     pretrain_epochs=100,maxiter=300):
 # rowNum and colNum are the row and column numbers of constructed genomaps
 # n_clusters: number of  pseudo-classes in the data, should be set as 17, 33 or 65

@@ -15,7 +15,7 @@ import scanpy as sc
 import numpy as np
 import pandas as pd
 
-def compute_genoVis(data,n_clusters=None, colNum=32,rowNum=32,batch_size=64,verbose=1,
+def genoVis(data,n_clusters=None, colNum=32,rowNum=32,batch_size=64,verbose=1,
                     pretrain_epochs=100,maxiter=300):
 # rowNum and colNum are the row and column numbers of constructed genomaps
 # n_clusters: number of data classes in the data

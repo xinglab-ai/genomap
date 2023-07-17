@@ -13,7 +13,7 @@ import umap
 from genomap.utils.gTraj_utils import nearest_divisible_by_four
 from genomap.utils.utils_MOI import *
 
-def compute_genoMOI(*arrays,n_clusters=None, colNum, rowNum):  
+def genoMOI(*arrays,n_clusters=None, colNum, rowNum):  
 
 # arrays: number of arrays such as array1,array2
 # n_clusters: number of data classes
