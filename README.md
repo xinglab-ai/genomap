@@ -41,7 +41,6 @@ plt.figure(1) # Plot the first genomap
 plt.imshow(findI, origin = 'lower', extent = [0, 10, 0, 10], aspect = 1)
 plt.title('Genomap of a cell from TM dataset')
 ```
-
 ### Example 2 - Try genoVis for data visualization and clustering
 
 ```python
@@ -78,7 +77,36 @@ plt.colorbar(h1)
 print('acc=%.4f, nmi=%.4f, ari=%.4f' % (metrics.acc(y, clusIndex), metrics.nmi(y, clusIndex), metrics.ari(y, clusIndex)))
 ```
 
-### Example 3 - Try genoTraj for cell trajectory analysis
+### Example 3 - Try genoDR for dimensionality reduction
+
+```python
+import scipy.io as sio
+import numpy as np
+from genoDimReduction import compute_genoDimReduction
+import matplotlib.pyplot as plt
+import umap
+
+dx = sio.loadmat('../data/reducedData_divseq.mat')
+data=dx['X']
+gt_data = sio.loadmat('../data/GT_divseq.mat')
+y = np.squeeze(gt_data['GT'])
+n_clusters = len(np.unique(y))
+
+resDR=compute_genoDimReduction(data,n_clusters=n_clusters, colNum=33,rowNum=33)
+#resDR=compute_genoDimReduction(data, colNum=33,rowNum=33) # if you dont know the number
+# of classes in the data
+embedding2D = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(resDR)
+
+plt.figure(figsize=(15, 10))
+plt.rcParams.update({'font.size': 28})    
+h1=plt.scatter(embedding2D[:, 0], embedding2D[:, 1], c=y,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+plt.xlabel('genoVis1')
+plt.ylabel('genoVis2')
+plt.tight_layout()
+plt.colorbar(h1)
+```
+
+### Example 4 - Try genoTraj for cell trajectory analysis
 
 ```python
 # Load data
@@ -100,7 +128,7 @@ plt.colorbar(h1)
 
 ```
 
-### Example 4 - Try genoMOI for multi-omic data integration
+### Example 5 - Try genoMOI for multi-omic data integration
 
 ```python
 
@@ -134,6 +162,37 @@ plt.xlabel('UMAP')
 plt.ylabel('UMAP2')
 plt.tight_layout()
 plt.colorbar(h1)
+```
+
+### Example 6 - Try genoSig for finding gene signatures for cell/data classes
+
+```python
+import numpy as np
+import scipy.io as sio
+from util_Sig import createGenomap_for_sig
+import pandas as pd
+from compute_genoSig import genoSig
+
+# Load data
+dx = sio.loadmat('../data/reducedData_divseq.mat')
+data=dx['X']
+# Load data labels
+label = pd.read_csv('../data/groundTruth_divseq.csv',header=None)
+# Load gene names corresponding to the columns of the data
+gene_names = ['Gene_' + str(i) for i in range(1, data.shape[1]+1)]
+gene_names=np.array(gene_names)
+
+# The cell classes for which gene signatures will be computed
+userPD = np.array(['DG'])
+
+colNum=32 # genomap column number
+rowNum=32 # genomap row number
+# Create genomaps
+genoMaps,gene_namesRe,T=createGenomap_for_sig(data,gene_names,rowNum,colNum)
+# compute the gene signatures
+result=genoSig(genoMaps,T,label,userPD,gene_namesRe, epochs=50)
+
+print(result.head())  
 ```
 
 # Citation
