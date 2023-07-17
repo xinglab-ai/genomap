@@ -55,3 +55,4 @@ class ConvDEC(FcDEC):
         clustering_layer = ClusteringLayer(self.n_clusters, name='clustering')(self.encoder.output)
         self.model = Model(inputs=self.autoencoder.input,
                            outputs=clustering_layer)
+

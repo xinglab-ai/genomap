@@ -19,7 +19,6 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.cluster import KMeans
 from .metrics import *
 
-
 def autoencoder(dims, act='relu'):
     """
     Fully connected auto-encoder model, symmetric.
@@ -314,3 +313,4 @@ class FcDEC(object):
         print('End clustering:', '-' * 60)
 
         return y_pred
+

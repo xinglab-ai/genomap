@@ -10,7 +10,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 import scipy
 
-from genomap import construct_genomap
+from genomap.genomap import construct_genomap
 from genomap.utils.util_Sig import select_n_features
 import genomap.genoNet as gNet
 

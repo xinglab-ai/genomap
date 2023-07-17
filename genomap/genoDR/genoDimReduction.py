@@ -11,7 +11,7 @@ from sklearn.feature_selection import VarianceThreshold
 from tensorflow.keras.optimizers import Adam
 import umap
 
-from genomap import construct_genomap
+from genomap.genomap import construct_genomap
 from genomap.utils.ConvIDEC import ConvIDEC
 from genomap.utils.gTraj_utils import nearest_divisible_by_four
 from genomap.utils.util_Sig import select_n_features

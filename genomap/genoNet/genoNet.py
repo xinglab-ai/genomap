@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Supervised genoNet
-Created on Sun May 15 09:03:29 2022
 
-@author: anonymous
+"""
+Created on Sun Jul 16 21:27:17 2023
+@author: Md Tauhidul Islam, Research Scientist, Dept. of radiation Oncology, Stanford University
 """
 
 import os

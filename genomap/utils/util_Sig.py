@@ -6,7 +6,7 @@ Created on Sun Jul 16 18:25:32 2023
 """
 
 import numpy as np
-from genomapT import construct_genomap_returnT
+from genomap.genomapT import construct_genomap_returnT
 # suppose you have a feature matrix X
 # X = np.array(...)
 

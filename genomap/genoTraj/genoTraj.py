@@ -1,21 +1,19 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jul 12 15:14:53 2023
 
-@author: Windows
+"""
+Created on Sun Jul 16 21:27:17 2023
+@author: Md Tauhidul Islam, Research Scientist, Dept. of radiation Oncology, Stanford University
 """
 
-from genomap.utils.class_discriminative_opt import ClassDiscriminative_OPT
-from genomap.genomap import construct_genomap
-from genomap.utils.gTraj_utils import compute_cluster_distances, nearest_divisible_by_four
-from genomap.utils import ConvIDEC
-import numpy as np
 import phate
+import numpy as np
+from genomap.utils.class_discriminative_opt import ClassDiscriminative_OPT
 import scipy
-from sklearn.feature_selection import VarianceThreshold
+from genomap.utils.gTraj_utils import compute_cluster_distances, nearest_divisible_by_four
 from tensorflow.keras.optimizers import Adam
-
-# from gTraj_utils import nearest_divisible_by_four
+from genomap.utils.ConvIDEC import ConvIDEC
+from sklearn.feature_selection import VarianceThreshold
+from genomap.genomap import construct_genomap
+from genomap.utils.util_Sig import select_n_features
 
 def apply_genoTraj(data, y_pred):
 # data: input data
@@ -48,12 +46,7 @@ def genoTraj(data,n_clusters = 33, colNum=32,rowNum=32,batch_size=64,verbose=1,
     rowNum=nearest_divisible_by_four(rowNum)
     nump=rowNum*colNum 
     if nump<data.shape[1]:
-    # create an instance of the VarianceThreshold class
-        selector = VarianceThreshold( )
-    # fit the selector to the data and get the indices of the top n most variable features
-        var_threshold = selector.fit(data)
-        top_n_indices = var_threshold.get_support(indices=True)
-        data=data[:,top_n_indices[0:nump]]  
+        data,index=select_n_features(data,nump)
     genoMaps=construct_genomap(data,rowNum,colNum,epsilon=0.0,num_iter=200)
 
 # Deep learning-based trajectory mapping

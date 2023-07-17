@@ -6,12 +6,13 @@ Created on Wed Jul 12 16:11:15 2023
 """
 
 from tensorflow.keras.optimizers import Adam
-from genomap.utils import ConvIDEC
+from genomap.utils.ConvIDEC import ConvIDEC
 from sklearn.feature_selection import VarianceThreshold
 from genomap.genomap import construct_genomap
 import umap
 from genomap.utils.gTraj_utils import nearest_divisible_by_four
-from genomap.utils.utils_MOI import *
+from genomap.utils.utils_MOI import * 
+from genomap.utils.util_Sig import select_n_features
 
 def genoMOI(*arrays,n_clusters=None, colNum, rowNum):  
 
@@ -50,12 +51,7 @@ def extract_genoVis_features(data,n_clusters=20, colNum=32,rowNum=32,batch_size=
     rowNum=nearest_divisible_by_four(rowNum)
     nump=rowNum*colNum 
     if nump<data.shape[1]:
-    # create an instance of the VarianceThreshold class
-        selector = VarianceThreshold( )
-    # fit the selector to the data and get the indices of the top n most variable features
-        var_threshold = selector.fit(data)
-        top_n_indices = var_threshold.get_support(indices=True)
-        data=data[:,top_n_indices[0:nump]]  
+        data,index=select_n_features(data,nump) 
     genoMaps=construct_genomap(data,rowNum,colNum,epsilon=0.0,num_iter=200)
 
 # Deep learning-based dimensionality reduction and clustering
