@@ -26,7 +26,7 @@ import pandas as pd # Please install pandas and matplotlib before you run this e
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy
-from genomap import construct_genomap
+import genomap as gp
 
 data = pd.read_csv('TM_data.csv', header=None,
                    delim_whitespace=False)
@@ -35,7 +35,7 @@ rowNum=33 # Row number of genomap
 
 dataNorm=scipy.stats.zscore(data,axis=0,ddof=1) # Normalization of the data
 
-genoMaps=construct_genomap(dataNorm,rowNum,colNum,epsilon=0.0,num_iter=200) # Construction of genomaps
+genoMaps=gp.construct_genomap(dataNorm,rowNum,colNum,epsilon=0.0,num_iter=200) # Construction of genomaps
 
 findI=genoMaps[10,:,:,:]
 
@@ -51,7 +51,7 @@ plt.show()
 import scipy.io as sio
 import numpy as np
 import pandas as pd
-from genomap.genoVis import genoVis
+import genomap.genoVis as gp
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
@@ -66,7 +66,7 @@ y = np.squeeze(gt_data['GT'])
 n_clusters = len(np.unique(y))
 
 
-resVis=genoVis(data,n_clusters=n_clusters, colNum=33,rowNum=33)
+resVis=gp.genoVis(data,n_clusters=n_clusters, colNum=33,rowNum=33)
 # Use resVis=compute_genoVis(data, colNum=32,rowNum=32), if you dont know the number
 # of classes in the data
 
@@ -90,7 +90,7 @@ print('acc=%.4f, nmi=%.4f, ari=%.4f' % (metrics.acc(y, clusIndex), metrics.nmi(y
 ```python
 import scipy.io as sio
 import numpy as np
-from genomap.genoDR import genoDR
+import genomap.genoDR as gp
 import matplotlib.pyplot as plt
 import umap
 
@@ -100,7 +100,7 @@ gt_data = sio.loadmat('GT_divseq.mat')
 y = np.squeeze(gt_data['GT'])
 n_clusters = len(np.unique(y))
 
-resDR=genoDR(data,n_clusters=n_clusters, colNum=33,rowNum=33)
+resDR=gp.genoDR(data,n_clusters=n_clusters, colNum=33,rowNum=33)
 #resDR=compute_genoDimReduction(data, colNum=33,rowNum=33) # if you dont know the number
 # of classes in the data
 embedding2D = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(resDR)
@@ -126,7 +126,7 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 import phate
 import umap
-from genomap.genoTraj import genoTraj
+import genomap.genoTraj as gp
 
 # Load data
 dx = sio.loadmat('organoidData.mat')
@@ -135,7 +135,7 @@ gt_data = sio.loadmat('cellsPsudo.mat')
 Y_time = np.squeeze(gt_data['newGT'])
 
 # Apply genoTraj for embedding showing cell trajectories
-outGenoTraj=genoTraj(data)
+outGenoTraj=gp.genoTraj(data)
 
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
@@ -169,7 +169,7 @@ plt.show()
 ```python
 import scanpy as sc
 import matplotlib.pyplot as plt
-from genomap.genoMOI import genoMOI
+import genomap.genoMOI as gp
 import scipy.io as sio
 import numpy as np
 import pandas as pd
@@ -195,7 +195,7 @@ dx = sio.loadmat('batchLabel.mat')
 ybatch = np.squeeze(dx['batchLabel'])
 
 # Apply genoMOI
-resVis=genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44)
+resVis=gp.genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44)
 
 # Visualize the integrated data using UMAP
 embedding = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(resVis)
@@ -217,7 +217,7 @@ import numpy as np
 import scipy.io as sio
 from genomap.utils.util_Sig import createGenomap_for_sig
 import pandas as pd
-from genomap.genoSig import genoSig
+import genomap.genoSig as gp
 
 # Load data
 dx = sio.loadmat('reducedData_divseq.mat')
@@ -236,7 +236,7 @@ rowNum=32 # genomap row number
 # Create genomaps
 genoMaps,gene_namesRe,T=createGenomap_for_sig(data,gene_names,rowNum,colNum)
 # compute the gene signatures
-result=genoSig(genoMaps,T,label,userPD,gene_namesRe, epochs=50)
+result=gp.genoSig(genoMaps,T,label,userPD,gene_namesRe, epochs=50)
 
 print(result.head())
 ```
@@ -247,7 +247,7 @@ print(result.head())
 import pandas as pd
 import numpy as np
 import scipy.io as sio
-from genomap.genoClassification import genoClassification
+import genomap.genoClassification as gp
 from genomap.utils.util_genoClassReg import select_random_values
 
 # First, we load the TM data. Data should be in cells X genes format, 
@@ -273,7 +273,7 @@ training_data=data.values[indxTrain-1]
 training_labels=GT[indxTrain-1]
 test_data=data.values[indxTest-1]
 
-est=genoClassification(training_data, training_labels, test_data, rowNum=rowNum, colNum=colNum, epoch=150)
+est=gp.genoClassification(training_data, training_labels, test_data, rowNum=rowNum, colNum=colNum, epoch=150)
 
 print('Classification accuracy of genomap+genoNet:'+str(np.sum(est==groundTruthTest) / est.shape[0]))  
 ```
@@ -285,7 +285,7 @@ print('Classification accuracy of genomap+genoNet:'+str(np.sum(est==groundTruthT
 import pandas as pd
 import numpy as np
 import scipy.io as sio
-from genomap.genoRegression import genoRegression
+import genomap.genoRegression as gp
 from sklearn.metrics import mean_squared_error
 from genomap.utils.util_genoClassReg import select_random_values
 
@@ -304,7 +304,7 @@ training_labels=Y_time[indxTrain-1]
 test_data=data[indxTest-1]
 
 # Run genoRegression
-est=genoRegression(training_data, training_labels, test_data, rowNum=40, colNum=40, epoch=200)
+est=gp.genoRegression(training_data, training_labels, test_data, rowNum=40, colNum=40, epoch=200)
 
 # Calculate MSE
 mse = mean_squared_error(groundTruthTest, est)
