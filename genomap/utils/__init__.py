@@ -8,3 +8,4 @@ from .gTraj_utils import *
 from .metrics import *
 from .utils_MOI import *
 from .util_Sig import *
+from .util_genoClassReg import *

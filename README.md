@@ -24,22 +24,25 @@ To run the example codes below, you will need to download data files from [here]
 ```python
 import pandas as pd # Please install pandas and matplotlib before you run this example
 import matplotlib.pyplot as plt
+import numpy as np
 import scipy
-import genomap as gp
+from genomap import construct_genomap
 
-data = pd.read_csv('TM_data.csv', header=None, delim_whitespace=False)
-colNum=31 # Column number of genomap
-rowNum=31 # Row number of genomap
+data = pd.read_csv('TM_data.csv', header=None,
+                   delim_whitespace=False)
+colNum=33 # Column number of genomap
+rowNum=33 # Row number of genomap
 
 dataNorm=scipy.stats.zscore(data,axis=0,ddof=1) # Normalization of the data
 
-genoMaps=gp.construct_genomap(dataNorm,rowNum,colNum) # Construction of genomaps
+genoMaps=construct_genomap(dataNorm,rowNum,colNum,epsilon=0.0,num_iter=200) # Construction of genomaps
 
-findI=genoMaps[0,:,:,:]
+findI=genoMaps[10,:,:,:]
 
 plt.figure(1) # Plot the first genomap
-plt.imshow(findI, origin = 'lower', extent = [0, 10, 0, 10], aspect = 1)
+plt.imshow(findI, origin = 'lower',  extent = [0, 10, 0, 10], aspect = 1)
 plt.title('Genomap of a cell from TM dataset')
+plt.show()
 ```
 
 ### Example 2 - Try genoVis for data visualization and clustering
@@ -47,10 +50,13 @@ plt.title('Genomap of a cell from TM dataset')
 ```python
 import scipy.io as sio
 import numpy as np
-import metrics
-from genomap.genoVis import compute_genoVis
-from genomap.genoTraj import compute_genoTraj
-from genomap.genoMOI import compute_genoMOI
+import pandas as pd
+from genomap.genoVis import genoVis
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+import phate
+import umap
 
 data = pd.read_csv('TM_data.csv', header=None,
                    delim_whitespace=False)
@@ -59,8 +65,9 @@ gt_data = sio.loadmat('GT_TM.mat')
 y = np.squeeze(gt_data['GT'])
 n_clusters = len(np.unique(y))
 
-resVis=compute_genoVis(data,n_clusters=n_clusters, colNum=33,rowNum=33)
-# Use resVis=compute_genoVis(data, colNum=32,rowNum=32), if you do not know the number
+
+resVis=genoVis(data,n_clusters=n_clusters, colNum=33,rowNum=33)
+# Use resVis=compute_genoVis(data, colNum=32,rowNum=32), if you dont know the number
 # of classes in the data
 
 resVisEmb=resVis[0] # Dimensionality reduction and visualization result
@@ -68,13 +75,13 @@ clusIndex=resVis[1] # Clustering result
 
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
-h1=plt.scatter(resVisEmb[:, 0], resVisEmb[:, 1], c=y,cmap='jet', marker='o', s=18)     
+h1=plt.scatter(resVisEmb[:, 0], resVisEmb[:, 1], c=y,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
 plt.xlabel('genoVis1')
 plt.ylabel('genoVis2')
 plt.tight_layout()
 plt.colorbar(h1)
 
-# Print clustering accuracy metrics
+import genomap.utils.metrics as metrics
 print('acc=%.4f, nmi=%.4f, ari=%.4f' % (metrics.acc(y, clusIndex), metrics.nmi(y, clusIndex), metrics.ari(y, clusIndex)))
 ```
 
@@ -83,17 +90,17 @@ print('acc=%.4f, nmi=%.4f, ari=%.4f' % (metrics.acc(y, clusIndex), metrics.nmi(y
 ```python
 import scipy.io as sio
 import numpy as np
-from genoDimReduction import compute_genoDimReduction
+from genomap.genoDR import genoDR
 import matplotlib.pyplot as plt
 import umap
 
-dx = sio.loadmat('../data/reducedData_divseq.mat')
+dx = sio.loadmat('reducedData_divseq.mat')
 data=dx['X']
-gt_data = sio.loadmat('../data/GT_divseq.mat')
+gt_data = sio.loadmat('GT_divseq.mat')
 y = np.squeeze(gt_data['GT'])
 n_clusters = len(np.unique(y))
 
-resDR=compute_genoDimReduction(data,n_clusters=n_clusters, colNum=33,rowNum=33)
+resDR=genoDR(data,n_clusters=n_clusters, colNum=33,rowNum=33)
 #resDR=compute_genoDimReduction(data, colNum=33,rowNum=33) # if you dont know the number
 # of classes in the data
 embedding2D = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(resDR)
@@ -105,11 +112,22 @@ plt.xlabel('genoVis1')
 plt.ylabel('genoVis2')
 plt.tight_layout()
 plt.colorbar(h1)
+plt.show()
 ```
 
 ### Example 4 - Try genoTraj for cell trajectory analysis
 
 ```python
+import scipy.io as sio
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+import phate
+import umap
+from genomap.genoTraj import genoTraj
+
 # Load data
 dx = sio.loadmat('organoidData.mat')
 data=dx['X3']
@@ -117,7 +135,7 @@ gt_data = sio.loadmat('cellsPsudo.mat')
 Y_time = np.squeeze(gt_data['newGT'])
 
 # Apply genoTraj for embedding showing cell trajectories
-outGenoTraj=compute_genoTraj(data)
+outGenoTraj=genoTraj(data)
 
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
@@ -126,14 +144,39 @@ plt.xlabel('genoTraj1')
 plt.ylabel('genoTraj2')
 plt.tight_layout()
 plt.colorbar(h1)
+plt.show()
 
+# Comparison with PHATE
+pca = PCA(n_components=100)
+resPCA=pca.fit_transform(data)
+
+phate_op = phate.PHATE()
+res_phate = phate_op.fit_transform(resPCA)
+    
+    
+plt.figure(figsize=(15, 10))
+plt.rcParams.update({'font.size': 28})    
+h1=plt.scatter(res_phate[:, 0], res_phate[:, 1], c=Y_time,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+plt.xlabel('PHATE1')
+plt.ylabel('PHATE2')
+plt.tight_layout()
+plt.colorbar(h1)
+plt.show()
 ```
 
 ### Example 5 - Try genoMOI for multi-omic data integration
 
 ```python
+import scanpy as sc
+import matplotlib.pyplot as plt
+from genomap.genoMOI import genoMOI
+import scipy.io as sio
+import numpy as np
+import pandas as pd
+import umap
 
-# Load datasets
+
+# Load five different pancreatic datasets
 dx = sio.loadmat('dataBaronX.mat')
 data=dx['dataBaron']
 dx = sio.loadmat('dataMuraroX.mat')
@@ -144,6 +187,7 @@ dx = sio.loadmat('dataWangX.mat')
 data4=dx['dataWang']
 dx = sio.loadmat('dataXinX.mat')
 data5=dx['dataXin']
+
 # Load class and batch labels
 dx = sio.loadmat('classLabel.mat')
 y = np.squeeze(dx['classLabel'])
@@ -151,18 +195,19 @@ dx = sio.loadmat('batchLabel.mat')
 ybatch = np.squeeze(dx['batchLabel'])
 
 # Apply genoMOI
-resVis=compute_genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44)
+resVis=genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44)
 
 # Visualize the integrated data using UMAP
-embedding = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(resVis) 
+embedding = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(resVis)
 
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
-h1=plt.scatter(embedding[:, 0], embedding[:, 1], c=y,cmap='jet', marker='o', s=18)     
-plt.xlabel('UMAP')
-plt.ylabel('UMAP2')
+h1=plt.scatter(embedding[:, 0], embedding[:, 1], c=y,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+plt.xlabel('genoVis1')
+plt.ylabel('genoVis2')
 plt.tight_layout()
 plt.colorbar(h1)
+plt.show()
 ```
 
 ### Example 6 - Try genoSig for finding gene signatures for cell/data classes
@@ -170,15 +215,15 @@ plt.colorbar(h1)
 ```python
 import numpy as np
 import scipy.io as sio
-from util_Sig import createGenomap_for_sig
+from genomap.utils.util_Sig import createGenomap_for_sig
 import pandas as pd
-from compute_genoSig import genoSig
+from genomap.genoSig import genoSig
 
 # Load data
-dx = sio.loadmat('../data/reducedData_divseq.mat')
+dx = sio.loadmat('reducedData_divseq.mat')
 data=dx['X']
 # Load data labels
-label = pd.read_csv('../data/groundTruth_divseq.csv',header=None)
+label = pd.read_csv('groundTruth_divseq.csv',header=None)
 # Load gene names corresponding to the columns of the data
 gene_names = ['Gene_' + str(i) for i in range(1, data.shape[1]+1)]
 gene_names=np.array(gene_names)
@@ -193,7 +238,7 @@ genoMaps,gene_namesRe,T=createGenomap_for_sig(data,gene_names,rowNum,colNum)
 # compute the gene signatures
 result=genoSig(genoMaps,T,label,userPD,gene_namesRe, epochs=50)
 
-print(result.head())  
+print(result.head())
 ```
 
 ### Example 7 - Try genoClassification for tabular data classification
@@ -202,9 +247,8 @@ print(result.head())
 import pandas as pd
 import numpy as np
 import scipy.io as sio
-from genoClassification import genoClassification
-from util_genoClassReg import select_random_values
-
+from genomap.genoClassification import genoClassification
+from genomap.utils.util_genoClassReg import select_random_values
 
 # First, we load the TM data. Data should be in cells X genes format, 
 data = pd.read_csv('TM_data.csv', header=None,
@@ -221,7 +265,7 @@ gt_data = sio.loadmat('GT_TM.mat')
 GT = np.squeeze(gt_data['GT'])
 GT=GT-1 # to ensure the labels begin with 0 to conform with PyTorch
 
-# Select 80% of data randomly for training and others for testing
+# Select 80% data randomly for training and others for testing
 indxTrain, indxTest= select_random_values(start=0, end=GT.shape[0], perc=0.8)
 groundTruthTest = GT[indxTest-1]
 
@@ -241,18 +285,18 @@ print('Classification accuracy of genomap+genoNet:'+str(np.sum(est==groundTruthT
 import pandas as pd
 import numpy as np
 import scipy.io as sio
-from genoRegression import genoRegression
+from genomap.genoRegression import genoRegression
 from sklearn.metrics import mean_squared_error
-from util_genoClassReg import select_random_values
+from genomap.utils.util_genoClassReg import select_random_values
 
 # Load data and labels
-dx = sio.loadmat('../data/organoidData.mat')
+dx = sio.loadmat('organoidData.mat')
 data=dx['X3']
-gt_data = sio.loadmat('../data/GT_Org.mat')
+gt_data = sio.loadmat('GT_Org.mat')
 Y_time = np.squeeze(gt_data['GT'])
 Y_time = Y_time - 1 # to ensure the labels begin with 0 to conform with PyTorch
 
-# Select 80% of data randomly for training and others for testing
+# Select 80% data randomly for training and others for testing
 indxTrain, indxTest= select_random_values(start=0, end=Y_time.shape[0], perc=0.8)
 groundTruthTest = Y_time[indxTest-1]
 training_data=data[indxTrain-1]
@@ -264,7 +308,7 @@ est=genoRegression(training_data, training_labels, test_data, rowNum=40, colNum=
 
 # Calculate MSE
 mse = mean_squared_error(groundTruthTest, est)
-print(f'MSE: {mse}') 
+print(f'MSE: {mse}')
 ```
 
 # Citation
