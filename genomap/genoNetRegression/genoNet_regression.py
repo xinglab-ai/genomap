@@ -49,7 +49,7 @@ class genoNet(nn.Module):
         
         self.num_flatten=h*w*init_f
         self.fc1 = nn.Linear(self.num_flatten, num_fc1)
-        self.fc2 = nn.Linear(num_fc1, class_num)
+        self.fc2 = nn.Linear(num_fc1, 1)
         self.dropout = nn.Dropout(0.25)
         
         
@@ -63,7 +63,7 @@ class genoNet(nn.Module):
         x = self.dropout(x)
         x = self.fc2(x)
         
-        return F.log_softmax(x, dim=1)
+        return x
     
     def forwardX(self, x):
         x = F.relu(self.conv1(x)); 
@@ -71,10 +71,10 @@ class genoNet(nn.Module):
         x = F.relu(self.fc1(x))
 
         return x
-    
+
 def get_device():
     return _get_device()
-
+    
 def _get_device():
     # help function to detect whether the computer has a GPU
     device = 'cpu'
@@ -101,7 +101,7 @@ def fit(model, dataloader, epoch, criterion, optimizer, device, trainset):
         img = img.to(device).float()
         
         label = data[1]
-        label = label.to(device).long()
+        label = label.to(device).float()
         optimizer.zero_grad()
         outputs = model(img)
 
@@ -145,15 +145,7 @@ def predict(model, dataloader, device):
     return np.concatenate(prediction_list)
     
 def traingenoNet(data, labels, maxEPOCH, batchSize=16, verbose=False):
-    # train the Sparse Autoencoder model
-    #
-    # data: training data, rows denote cells and columns denote the genes.
-    # reduced_Dim: neurons in the hidden layer
-    # maxEPOCH: max training EPOCH number
-    # batchSize: batchSize for training
-    # l2: the weight for l2 regularizer of all parameters
-    # sparse_rho: the desired value for KL Divergence
-    # sparse: the weight for sparse regularizer (KL Divergence loss)
+    # train the genonet regression model
     device = torch.device('cpu')
     
     trainset = geneDataset(data, labels)
@@ -167,7 +159,7 @@ def traingenoNet(data, labels, maxEPOCH, batchSize=16, verbose=False):
     class_weight = torch.Tensor(np.sum(class_weight) / class_weight).to(device)
     model = genoNet(input_dim, class_num).to(device)
     
-    criterion = nn.CrossEntropyLoss(weight=class_weight)
+    criterion = nn.MSELoss()
     optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-5)
     train_loss = []
     for epoch in range(maxEPOCH):
@@ -192,3 +184,4 @@ def rescale(B):
     # Rescale a vector from 0 to 1
     Bc=(B-np.min(B))/(np.max(B)-np.min(B))
     return Bc
+

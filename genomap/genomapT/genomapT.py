@@ -11,6 +11,7 @@ Construction of genomaps
 @author: anonymous
 
 """
+
 import numpy as np
 import sklearn.metrics as mpd
 from genomap.genomapOPT import create_space_distributions, gromov_wasserstein_adjusted_norm

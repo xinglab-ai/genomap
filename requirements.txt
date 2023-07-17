@@ -1,13 +1,19 @@
 anndata
 bbknn
 igraph
+keras
+lap
+lime
 louvain
 numpy
+pandas
 phate
 pot
 scanpy
 scipy
 scikit-learn
 tensorflow
+torch
+tqdm
 umap
 

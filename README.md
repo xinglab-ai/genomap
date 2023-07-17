@@ -41,6 +41,7 @@ plt.figure(1) # Plot the first genomap
 plt.imshow(findI, origin = 'lower', extent = [0, 10, 0, 10], aspect = 1)
 plt.title('Genomap of a cell from TM dataset')
 ```
+
 ### Example 2 - Try genoVis for data visualization and clustering
 
 ```python
@@ -271,7 +272,6 @@ print(f'MSE: {mse}')
 If you use the genomap code, please cite our Nature Communications paper: https://www.nature.com/articles/s41467-023-36383-6
 
 Islam, M.T., Xing, L. Cartography of Genomic Interactions Enables Deep Analysis of Single-Cell Expression Data. Nat Commun 14, 679 (2023). https://doi.org/10.1038/s41467-023-36383-6
-
 
 
 

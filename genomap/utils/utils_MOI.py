@@ -7,7 +7,6 @@ Created on Thu Jul 13 12:26:22 2023
 import scanpy as sc
 import numpy as np
 import scipy.io
-import anndata
 import pandas as pd
 import anndata as ad
 

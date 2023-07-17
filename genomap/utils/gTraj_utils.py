@@ -1,3 +1,8 @@
+"""
+Created on Sun Jul 16 21:27:17 2023
+@author: Md Tauhidul Islam, Research Scientist, Dept. of radiation Oncology, Stanford University
+"""
+
 import numpy as np
 from scipy.spatial.distance import cdist
 
@@ -38,6 +43,39 @@ def compute_cluster_distances(X, labels):
 
 # distances = compute_cluster_distances(X, labels)
 # print(distances)
+def rgb2gray(image):
+    return np.dot(image[...,:3], [0.2989, 0.5870, 0.1140])
+def gray2rgb(image):
+    return np.repeat(image, 3, axis=3)
+def create_sorted_vectors(images):
+    num_images = len(images)
+
+    # Create empty lists to hold the values and positions
+    values = []
+    positions = []
+
+    # Iterate over the images
+    for i in range(num_images):
+        # Flatten the image to a 1D array and get the sorted indices
+        flat_image = images[i].flatten()
+        sorted_indices = np.argsort(flat_image)[::-1]  # sort in descending order
+
+        # Save the sorted values and positions
+        values.append(flat_image[sorted_indices])
+        positions.append(np.unravel_index(sorted_indices, images[i].shape))
+
+    # Convert the lists to numpy arrays
+    values = np.array(values)
+    positions = np.array(positions)
+    return values, positions
+    
+def sort_image_by_positions(image, positions):
+    # Flatten the image to a 1D array
+    flat_image = image.flatten()
+    # Reorder the flattened image using the positions
+    sorted_image = flat_image[np.ravel_multi_index(positions, image.shape)]  
+
+    return sorted_image
 def nearest_divisible_by_four(num):
     remainder = num % 4
 
