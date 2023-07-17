@@ -67,7 +67,7 @@ n_clusters = len(np.unique(y))
 
 
 resVis=gp.genoVis(data,n_clusters=n_clusters, colNum=33,rowNum=33)
-# Use resVis=compute_genoVis(data, colNum=32,rowNum=32), if you dont know the number
+# Use resVis=gp.genoVis(data, colNum=32,rowNum=32), if you dont know the number
 # of classes in the data
 
 resVisEmb=resVis[0] # Dimensionality reduction and visualization result
