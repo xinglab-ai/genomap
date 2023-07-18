@@ -14,11 +14,12 @@ from genomap.utils.gTraj_utils import nearest_divisible_by_four
 from genomap.utils.utils_MOI import * 
 from genomap.utils.util_Sig import select_n_features
 
-def genoMOI(*arrays,n_clusters=None, colNum, rowNum):  
+def genoMOI(*arrays, n_clusters=None, n_dim=32, colNum=32, rowNum=32):
 
-# arrays: number of arrays such as array1,array2
+# arrays: a number of arrays such as array1, array2 from different sources
 # n_clusters: number of data classes
-# colNum and rowNum: column are rwo number of genomaps
+# n_dim: number of the dimension in returned integrated data
+# colNum and rowNum: column and row number of genomaps
 #
 # Pre-align data with bbknn
     batch_corrected_data=apply_bbknn_and_return_batch_corrected(*arrays)
@@ -34,12 +35,12 @@ def genoMOI(*arrays,n_clusters=None, colNum, rowNum):
         cluster_labels = adata.obs['louvain']
         n_clusters = len(np.unique(cluster_labels))        
     
-    resVis=extract_genoVis_features(dataDX,n_clusters=n_clusters, colNum=colNum,rowNum=rowNum)
+    resVis=extract_genoVis_features(dataDX, n_clusters=n_clusters, n_dim=n_dim, colNum=colNum,rowNum=rowNum)
     return resVis
 
 
-def extract_genoVis_features(data,n_clusters=20, colNum=32,rowNum=32,batch_size=64,verbose=1,
-                    pretrain_epochs=100,maxiter=300):
+def extract_genoVis_features(data,n_clusters=20, n_dim=32, colNum=32, rowNum=32, batch_size=64, verbose=1,
+                    pretrain_epochs=100, maxiter=300):
 # rowNum and colNum are the row and column numbers of constructed genomaps
 # n_clusters: number of data classes in the data
 # batch_size: number of samples in each mini batch while training the deep neural network
@@ -56,7 +57,7 @@ def extract_genoVis_features(data,n_clusters=20, colNum=32,rowNum=32,batch_size=
 
 # Deep learning-based dimensionality reduction and clustering
     optimizer = Adam()    
-    model = ConvIDEC(input_shape=genoMaps.shape[1:], filters=[32, 64, 128, 32], n_clusters=n_clusters)
+    model = ConvIDEC(input_shape=genoMaps.shape[1:], filters=[32, 64, 128, n_dim], n_clusters=n_clusters)
     model.compile(optimizer=optimizer, loss=['kld', 'mse'], loss_weights=[0.1, 1.0])
     pretrain_optimizer ='adam'
     update_interval=50

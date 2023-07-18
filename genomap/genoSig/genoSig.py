@@ -79,6 +79,7 @@ import numpy as np
 import pandas as pd
 
 def arrays_to_dataframe(arrays, strings):
+    # converts a numpy array to a panda dataframe
     # Check if the number of arrays is even
     if len(arrays) % 2 != 0:
         raise ValueError("The number of arrays should be even.")
@@ -105,6 +106,25 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
 def genoSig(genoMaps,T,label,userPD,gene_names, epochs=100):
+
+    """
+    Returns the gene names and their importance score in the range of 0 to 255 in a specific data class
+
+    Parameters
+    ----------
+    genoMaps : ndarray, shape (cellNum, rowNum, colNum, 1)
+    T: numpy array, shape (geneNum, geneNum)
+        transfer function that converts the transformation of 1D to 2D.
+    label : numpy array,
+         cell labels of the data
+    userPD : numpy array,
+         the classes for which gene signature should be computed
+
+    Returns
+    -------
+    result : panda dataframe containing the gene names and their importance scores in different classes
+    """
+
     genoMaps_3d = np.repeat(genoMaps, 3, axis=-1)
 
     # first, convert the strings to integer labels
@@ -117,13 +137,9 @@ def genoSig(genoMaps,T,label,userPD,gene_names, epochs=100):
         lc = np.append(lc, label_encoded[first_occurrence[0]])
 
     lc = np.array(lc)
-
     n_clusters = len(np.unique(label))
     y_train = to_categorical(label_encoded)
-    # meanI=compute_genoSig(X_train,y_train, [y_train[0],y_train[1]])
     meanI = compute_genoSig(genoMaps_3d, label_encoded, lc, epochs=epochs)
-
-
 
     result = pd.DataFrame()
 

@@ -196,8 +196,8 @@ y = np.squeeze(dx['classLabel'])
 dx = sio.loadmat('batchLabel.mat')
 ybatch = np.squeeze(dx['batchLabel'])
 
-# Apply genoMOI
-resVis=gp.genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44)
+# Apply genoMOI with genomap size of 44x44 and dimension of 32 for the returned integrated data
+resVis=gp.genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44, n_dim=32)
 
 # Visualize the integrated data using UMAP
 embedding = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(resVis)
@@ -227,6 +227,7 @@ data=dx['X']
 # Load data labels
 label = pd.read_csv('groundTruth_divseq.csv',header=None)
 # Load gene names corresponding to the columns of the data
+# Here we create artificial gene names as Gene_1, Gene_2. You can upload your gene sets
 gene_names = ['Gene_' + str(i) for i in range(1, data.shape[1]+1)]
 gene_names=np.array(gene_names)
 
