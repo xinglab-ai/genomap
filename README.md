@@ -100,16 +100,17 @@ gt_data = sio.loadmat('GT_divseq.mat')
 y = np.squeeze(gt_data['GT'])
 n_clusters = len(np.unique(y))
 
-resDR=gp.genoDR(data,n_clusters=n_clusters, colNum=33,rowNum=33)
-#resDR=compute_genoDimReduction(data, colNum=33,rowNum=33) # if you dont know the number
+reduced_dim=32 # Number of reduced dimension
+resDR=gp.genoDR(data, n_dim=reduced_dim, n_clusters=n_clusters, colNum=33,rowNum=33) 
+#resDR=gp.genoDR(data, n_dim=reduced_dim, colNum=33,rowNum=33) # if you dont know the number
 # of classes in the data
 embedding2D = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(resDR)
 
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
 h1=plt.scatter(embedding2D[:, 0], embedding2D[:, 1], c=y,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
-plt.xlabel('genoVis1')
-plt.ylabel('genoVis2')
+plt.xlabel('UMAP1')
+plt.ylabel('UMAP2')
 plt.tight_layout()
 plt.colorbar(h1)
 plt.show()
