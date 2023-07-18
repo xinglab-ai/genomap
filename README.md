@@ -80,6 +80,7 @@ plt.xlabel('genoVis1')
 plt.ylabel('genoVis2')
 plt.tight_layout()
 plt.colorbar(h1)
+plt.show()
 
 import genomap.utils.metrics as metrics
 print('acc=%.4f, nmi=%.4f, ari=%.4f' % (metrics.acc(y, clusIndex), metrics.nmi(y, clusIndex), metrics.ari(y, clusIndex)))
@@ -204,8 +205,8 @@ embedding = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(re
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
 h1=plt.scatter(embedding[:, 0], embedding[:, 1], c=y,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
-plt.xlabel('genoVis1')
-plt.ylabel('genoVis2')
+plt.xlabel('UMAP1')
+plt.ylabel('UMAP2')
 plt.tight_layout()
 plt.colorbar(h1)
 plt.show()
@@ -276,7 +277,7 @@ test_data=data.values[indxTest-1]
 
 est=gp.genoClassification(training_data, training_labels, test_data, rowNum=rowNum, colNum=colNum, epoch=150)
 
-print('Classification accuracy of genomap+genoNet:'+str(np.sum(est==groundTruthTest) / est.shape[0]))  
+print('Classification accuracy of genomap approach:'+str(np.sum(est==groundTruthTest) / est.shape[0]))  
 ```
 
 
