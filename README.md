@@ -19,7 +19,7 @@ To run the example codes below, you will need to download data files from [here]
 
 ## Example codes
 
-### Example 1 - Construct a genomap
+### Example 1 - Construct genomaps
 
 ```python
 import pandas as pd # Please install pandas and matplotlib before you run this example
@@ -70,7 +70,7 @@ resVis=gp.genoVis(data,n_clusters=n_clusters, colNum=33,rowNum=33)
 # Use resVis=gp.genoVis(data, colNum=32,rowNum=32), if you dont know the number
 # of classes in the data
 
-resVisEmb=resVis[0] # Dimensionality reduction and visualization result
+resVisEmb=resVis[0] # Visualization result
 clusIndex=resVis[1] # Clustering result
 
 plt.figure(figsize=(15, 10))
