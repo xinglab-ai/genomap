@@ -6,7 +6,7 @@ Created on Wed Jul 12 16:11:15 2023
 """
 
 from tensorflow.keras.optimizers import Adam
-import umap
+import umap.umap_ as umap
 import numpy as np
 import scanorama
 import phate

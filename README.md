@@ -56,7 +56,7 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 import phate
-import umap
+import umap.umap_ as umap
 
 data = pd.read_csv('TM_data.csv', header=None,
                    delim_whitespace=False)
@@ -93,7 +93,7 @@ import scipy.io as sio
 import numpy as np
 import genomap.genoDR as gp
 import matplotlib.pyplot as plt
-import umap
+import umap.umap_ as umap
 
 dx = sio.loadmat('reducedData_divseq.mat')
 data=dx['X']
@@ -127,7 +127,7 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 import phate
-import umap
+import umap.umap_ as umap
 import genomap.genoTraj as gp
 
 # Load data
