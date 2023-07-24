@@ -9,6 +9,7 @@ pandas
 phate
 pot
 scanpy
+scanorama
 scipy
 scikit-learn
 tensorflow
