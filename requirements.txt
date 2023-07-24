@@ -5,10 +5,13 @@ keras
 lime
 louvain
 numpy
+openpyxl
 pandas
 phate
 pot
+pybiomart
 scanpy
+scanorama
 scipy
 scikit-learn
 tensorflow

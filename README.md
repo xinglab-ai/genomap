@@ -171,12 +171,10 @@ plt.show()
 ```python
 import scanpy as sc
 import matplotlib.pyplot as plt
-import genomap.genoMOI as gp
 import scipy.io as sio
 import numpy as np
 import pandas as pd
-import umap
-
+from genomap.genoMOI import genoMOIvis, genoMOItraj
 
 # Load five different pancreatic datasets
 dx = sio.loadmat('dataBaronX.mat')
@@ -196,23 +194,79 @@ y = np.squeeze(dx['classLabel'])
 dx = sio.loadmat('batchLabel.mat')
 ybatch = np.squeeze(dx['batchLabel'])
 
-# Apply genoMOI with genomap size of 44x44 and dimension of 32 for the returned integrated data
-resVis=gp.genoMOI(data, data2, data3, data4, data5, colNum=44, rowNum=44, n_dim=32)
+# Apply genomap-based multi omic integration and visualize the integrated data with local structure for cluster analysis
+# returns 2D visualization, cluster labels, and intgerated data
+resVis,cli,int_data=genoMOIvis(data, data2, data3, data4, data5, colNum=12, rowNum=12, n_dim=32, epoch=10, prealign_method='scanorama')
 
-# Visualize the integrated data using UMAP
-embedding = umap.UMAP(n_neighbors=30,min_dist=0.3,n_epochs=200).fit_transform(resVis)
 
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
-h1=plt.scatter(embedding[:, 0], embedding[:, 1], c=y,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
-plt.xlabel('UMAP1')
-plt.ylabel('UMAP2')
+h1=plt.scatter(resVis[:, 0], resVis[:, 1], c=y,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+plt.xlabel('genoVis1')
+plt.ylabel('genoVis2')
+plt.tight_layout()
+plt.colorbar(h1)
+plt.show()
+
+plt.figure(figsize=(15, 10))
+plt.rcParams.update({'font.size': 28})    
+h1=plt.scatter(resVis[:, 0], resVis[:, 1], c=ybatch,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+plt.xlabel('genoVis1')
+plt.ylabel('genoVis2')
 plt.tight_layout()
 plt.colorbar(h1)
 plt.show()
 ```
 
-### Example 6 - Try genoSig for finding gene signatures for cell/data classes
+```python
+# Apply genomap-based multi omic integration and visualize the integrated data with global structure for trajectory analysis
+
+# returns 2D embedding, cluster labels, and intgerated data
+resTraj,cli,int_data=genoMOItraj(data, data2, data3, data4, data5, colNum=12, rowNum=12, n_dim=32, epoch=10, prealign_method='scanorama')
+
+
+plt.figure(figsize=(15, 10))
+plt.rcParams.update({'font.size': 28})    
+h1=plt.scatter(resTraj[:, 0], resTraj[:, 1], c=y,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+plt.xlabel('genoTraj1')
+plt.ylabel('genoTraj2')
+plt.tight_layout()
+plt.colorbar(h1)
+plt.show()
+
+plt.figure(figsize=(15, 10))
+plt.rcParams.update({'font.size': 28})    
+h1=plt.scatter(resTraj[:, 0], resTraj[:, 1], c=ybatch,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+plt.xlabel('genoTraj1')
+plt.ylabel('genoTraj2')
+plt.tight_layout()
+plt.colorbar(h1)
+plt.show()
+```
+
+### Example 6 - Try genoAnnotate for cell annotation
+
+```python
+import scanpy as sc
+import pandas as pd
+import genomap.genoAnnotate as gp
+#Load the PBMC dataset
+adata = sc.read_10x_mtx("pbmc3k_filtered_gene_bc_matrices/")
+
+# Input: adata: annData containing the raw gene counts
+# tissue type: e.g. Immune system,Pancreas,Liver,Eye,Kidney,Brain,Lung,Adrenal,Heart,Intestine,Muscle,Placenta,Spleen,Stomach,Thymus 
+ 
+adataP = gp.genoAnnotate(adata,tissue_type="Immune system")
+
+
+# Compute UMAP (requires neighborhood graph, see the previous code for Louvain clustering)
+sc.tl.umap(adataP)
+# Create a UMAP plot colored by cell type labels
+cell_annotations=adataP.obs['cell_type']
+sc.pl.umap(adataP, color='cell_type')
+```
+
+### Example 7 - Try genoSig for finding gene signatures for cell/data classes
 
 ```python
 import numpy as np
@@ -244,7 +298,7 @@ result=gp.genoSig(genoMaps,T,label,userPD,gene_namesRe, epochs=50)
 print(result.head())
 ```
 
-### Example 7 - Try genoClassification for tabular data classification
+### Example 8 - Try genoClassification for tabular data classification
 
 ```python
 import pandas as pd
@@ -281,8 +335,7 @@ est=gp.genoClassification(training_data, training_labels, test_data, rowNum=rowN
 print('Classification accuracy of genomap approach:'+str(np.sum(est==groundTruthTest) / est.shape[0]))  
 ```
 
-
-### Example 8 - Try genoRegression for tabular data regression
+### Example 9 - Try genoRegression for tabular data regression
 
 ```python
 import pandas as pd
