@@ -7,12 +7,12 @@ Created on Thu Jul 20 16:57:36 2023
 # We are in the process of using image matching techique for further enhancement
 # of the cell annotation
 """
-import pandas as pd
 import numpy as np
-import scipy
 import openpyxl
+import pandas as pd
 from pybiomart import Dataset
 import re
+import scipy
 
 def sctype_score(scRNAseqData, scaled=True, gs=None, gs2=None, gene_names_to_uppercase=True, cell_types=None):
     # Ensure input is a pandas DataFrame
@@ -83,7 +83,8 @@ def sctype_score(scRNAseqData, scaled=True, gs=None, gs2=None, gene_names_to_upp
 
     return es
 
-def gene_sets_prepare(path_to_db_file, cell_type):
+
+def gene_sets_prepare(path_to_db_file, cell_type, species="human"):
     # Read the Excel file
     cell_markers = pd.read_excel(path_to_db_file, engine='openpyxl')
 
@@ -98,8 +99,8 @@ def gene_sets_prepare(path_to_db_file, cell_type):
     cell_markers['geneSymbolmore2'] = cell_markers['geneSymbolmore2'].astype(str).str.replace(" ", "")
     
  
-    cell_markers["geneSymbolmore1"] = cell_markers["geneSymbolmore1"].apply(lambda x: correct_gene_symbols(x))
-    cell_markers["geneSymbolmore2"] = cell_markers["geneSymbolmore2"].apply(lambda x: correct_gene_symbols(x))
+    cell_markers["geneSymbolmore1"] = cell_markers["geneSymbolmore1"].apply(lambda x: correct_gene_symbols(x, species=species))
+    cell_markers["geneSymbolmore2"] = cell_markers["geneSymbolmore2"].apply(lambda x: correct_gene_symbols(x, species=species))
     
 
     # Define a helper function to handle potential NaN values

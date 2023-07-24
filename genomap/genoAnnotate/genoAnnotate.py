@@ -8,11 +8,13 @@ Created on Sun Jul 23 15:18:43 2023
 # of the cell annotation
 """
 
+
 from genomap.genotype import *
 import scanpy as sc
 
-def genoAnnotate(adata,tissue_type,database=None):
+def genoAnnotate(adata, species, tissue_type, database=None):
     # Input: adata: annData containing the raw gene counts
+    # species :'human' or 'mouse'
     # tissue type: e.g. Immune system,Pancreas,Liver,Eye,Kidney,Brain,Lung,Adrenal,Heart,Intestine,Muscle,Placenta,Spleen,Stomach,Thymus 
     # database: User can select his/her own database in excel format
 
@@ -33,7 +35,7 @@ def genoAnnotate(adata,tissue_type,database=None):
     sc.tl.pca(adata)
     
     # Prepare positive and negative gene sets
-    result = gene_sets_prepare(database, tissue_type)
+    result = gene_sets_prepare(database, tissue_type, species)
     gs = result['gs_positive']
     gs2 = result['gs_negative']
     cell_types = result['cell_types']
@@ -52,7 +54,7 @@ def genoAnnotate(adata,tissue_type,database=None):
     sc.pp.neighbors(adata, n_neighbors=10, use_rep='X_pca')
     # Perform clustering so that cell-type can be assigned to each cluster
     sc.tl.leiden(adata)
-    # The cluster labels are stored in `adata.obs['louvain']`
+    # The cluster labels are stored in `adata.obs['leiden']`
     results = []
     for cl in adata.obs['leiden'].unique():
         cells_in_cluster = adata.obs_names[adata.obs['leiden'] == cl]
