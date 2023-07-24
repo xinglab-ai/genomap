@@ -4,7 +4,7 @@ Created on Sun Jul 23 15:18:43 2023
 
 @author: Md Tauhidul Islam
 # This code is inspired by scType (https://github.com/IanevskiAleksandr/sc-type)
-# We are in the process of using image matching techique for further enhancement
+# We are in the process of using image matching technique for further enhancement
 # of the cell annotation
 """
 

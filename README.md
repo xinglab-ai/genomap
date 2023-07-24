@@ -1,4 +1,4 @@
-# Genomap creates images from gene expression data and offers high-performance dimensionality reduction and visualization, data clustering, classification and regression, gene signature extraction, multi-omics data integration, and trajectory analysis 
+# Genomap creates images from gene expression data and offers high-performance dimensionality reduction and visualization, data clustering, classification and regression, automatic cell annotation, gene signature extraction, multi-omics data integration, and trajectory analysis 
 
 Genomap is an entropy-based cartography strategy to contrive the high dimensional gene expression data into a configured image format with explicit integration of the genomic interactions. This unique cartography casts the gene-gene interactions into a spatial configuration and enables us to extract the deep genomic interaction features and discover underlying discriminative patterns of the data. For a wide variety of applications (cell clustering and recognition, gene signature extraction, single-cell data integration, cellular trajectory analysis, dimensionality reduction, and visualization), genomap drastically improves the accuracy of data analyses as compared to state-of-the-art techniques.
 
@@ -198,45 +198,45 @@ ybatch = np.squeeze(dx['batchLabel'])
 # returns 2D visualization, cluster labels, and intgerated data
 resVis,cli,int_data=gp.genoMOIvis(data, data2, data3, data4, data5, colNum=12, rowNum=12, n_dim=32, epoch=10, prealign_method='scanorama')
 
-
+# Plot colored with cell class labels
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
-h1=plt.scatter(resVis[:, 0], resVis[:, 1], c=y,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+h1=plt.scatter(resVis[:, 0], resVis[:, 1], c=y,cmap='jet', marker='o', s=18)      
 plt.xlabel('genoVis1')
 plt.ylabel('genoVis2')
 plt.tight_layout()
 plt.colorbar(h1)
 plt.show()
 
+# Plot colored with batch labels
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
-h1=plt.scatter(resVis[:, 0], resVis[:, 1], c=ybatch,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+h1=plt.scatter(resVis[:, 0], resVis[:, 1], c=ybatch,cmap='jet', marker='o', s=18)      
 plt.xlabel('genoVis1')
 plt.ylabel('genoVis2')
 plt.tight_layout()
 plt.colorbar(h1)
 plt.show()
-```
 
-```python
 # Apply genomap-based multi omic integration and visualize the integrated data with global structure for trajectory analysis
 
 # returns 2D embedding, cluster labels, and intgerated data
 resTraj,cli,int_data=gp.genoMOItraj(data, data2, data3, data4, data5, colNum=12, rowNum=12, n_dim=32, epoch=10, prealign_method='scanorama')
 
-
+# Plot colored with cell class labels
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
-h1=plt.scatter(resTraj[:, 0], resTraj[:, 1], c=y,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+h1=plt.scatter(resTraj[:, 0], resTraj[:, 1], c=y,cmap='jet', marker='o', s=18)      
 plt.xlabel('genoTraj1')
 plt.ylabel('genoTraj2')
 plt.tight_layout()
 plt.colorbar(h1)
 plt.show()
 
+# Plot colored with batch labels
 plt.figure(figsize=(15, 10))
 plt.rcParams.update({'font.size': 28})    
-h1=plt.scatter(resTraj[:, 0], resTraj[:, 1], c=ybatch,cmap='jet', marker='o', s=18)      #  ax = plt.subplot(3, n, i + 1*10+1)
+h1=plt.scatter(resTraj[:, 0], resTraj[:, 1], c=ybatch,cmap='jet', marker='o', s=18)      
 plt.xlabel('genoTraj1')
 plt.ylabel('genoTraj2')
 plt.tight_layout()
@@ -260,11 +260,9 @@ adata = sc.read_10x_mtx("./pbmc3k_filtered_gene_bc_matrices/")
 adataP=gp.genoAnnotate(adata,species="human", tissue_type="Immune system")
 cell_annotations=adataP.obs['cell_type'].values # numpy array containing the
 # cell annotations
-
 # Compute t-SNE
 sc.tl.tsne(adataP)
 # Create a t-SNE plot colored by cell type labels
-cell_annotations=adataP.obs['cell_type']
 sc.pl.tsne(adataP, color='cell_type')
 ```
 
