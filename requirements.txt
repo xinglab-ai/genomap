@@ -2,6 +2,7 @@ anndata
 bbknn
 igraph
 keras
+leidenalg
 lime
 louvain
 numpy
