@@ -174,7 +174,7 @@ import matplotlib.pyplot as plt
 import scipy.io as sio
 import numpy as np
 import pandas as pd
-from genomap.genoMOI import genoMOIvis, genoMOItraj
+import genomap.genoMOI as gp
 
 # Load five different pancreatic datasets
 dx = sio.loadmat('dataBaronX.mat')
@@ -196,7 +196,7 @@ ybatch = np.squeeze(dx['batchLabel'])
 
 # Apply genomap-based multi omic integration and visualize the integrated data with local structure for cluster analysis
 # returns 2D visualization, cluster labels, and intgerated data
-resVis,cli,int_data=genoMOIvis(data, data2, data3, data4, data5, colNum=12, rowNum=12, n_dim=32, epoch=10, prealign_method='scanorama')
+resVis,cli,int_data=gp.genoMOIvis(data, data2, data3, data4, data5, colNum=12, rowNum=12, n_dim=32, epoch=10, prealign_method='scanorama')
 
 
 plt.figure(figsize=(15, 10))
@@ -222,7 +222,7 @@ plt.show()
 # Apply genomap-based multi omic integration and visualize the integrated data with global structure for trajectory analysis
 
 # returns 2D embedding, cluster labels, and intgerated data
-resTraj,cli,int_data=genoMOItraj(data, data2, data3, data4, data5, colNum=12, rowNum=12, n_dim=32, epoch=10, prealign_method='scanorama')
+resTraj,cli,int_data=gp.genoMOItraj(data, data2, data3, data4, data5, colNum=12, rowNum=12, n_dim=32, epoch=10, prealign_method='scanorama')
 
 
 plt.figure(figsize=(15, 10))
@@ -250,20 +250,22 @@ plt.show()
 import scanpy as sc
 import pandas as pd
 import genomap.genoAnnotate as gp
+import matplotlib.pyplot as plt
 #Load the PBMC dataset
-adata = sc.read_10x_mtx("pbmc3k_filtered_gene_bc_matrices/")
+adata = sc.read_10x_mtx("./pbmc3k_filtered_gene_bc_matrices/")
 
 # Input: adata: annData containing the raw gene counts
 # tissue type: e.g. Immune system,Pancreas,Liver,Eye,Kidney,Brain,Lung,Adrenal,Heart,Intestine,Muscle,Placenta,Spleen,Stomach,Thymus 
  
-adataP = gp.genoAnnotate(adata,tissue_type="Immune system")
+adataP=gp.genoAnnotate(adata,species="human", tissue_type="Immune system")
+cell_annotations=adataP.obs['cell_type'].values # numpy array containing the
+# cell annotations
 
-
-# Compute UMAP (requires neighborhood graph, see the previous code for Louvain clustering)
-sc.tl.umap(adataP)
-# Create a UMAP plot colored by cell type labels
+# Compute t-SNE
+sc.tl.tsne(adataP)
+# Create a t-SNE plot colored by cell type labels
 cell_annotations=adataP.obs['cell_type']
-sc.pl.umap(adataP, color='cell_type')
+sc.pl.tsne(adataP, color='cell_type')
 ```
 
 ### Example 7 - Try genoSig for finding gene signatures for cell/data classes
