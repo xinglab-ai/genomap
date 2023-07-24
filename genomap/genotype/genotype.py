@@ -10,8 +10,9 @@ Created on Thu Jul 20 16:57:36 2023
 import pandas as pd
 import numpy as np
 import scipy
-
-
+import openpyxl
+from pybiomart import Dataset
+import re
 
 def sctype_score(scRNAseqData, scaled=True, gs=None, gs2=None, gene_names_to_uppercase=True, cell_types=None):
     # Ensure input is a pandas DataFrame
@@ -82,11 +83,6 @@ def sctype_score(scRNAseqData, scaled=True, gs=None, gs2=None, gene_names_to_upp
 
     return es
 
-
-
-
-import openpyxl
-
 def gene_sets_prepare(path_to_db_file, cell_type):
     # Read the Excel file
     cell_markers = pd.read_excel(path_to_db_file, engine='openpyxl')
@@ -134,8 +130,6 @@ def gene_sets_prepare(path_to_db_file, cell_type):
 
     return {'gs_positive': gs, 'gs_negative': gs2, 'cell_types': cell_types}
 
-
-
 def correct_gene_symbols(gene_symbols, species="human"):
     if isinstance(gene_symbols, str):
         gene_symbols = gene_symbols.split(",")
@@ -160,11 +154,6 @@ def correct_gene_symbols(gene_symbols, species="human"):
     else:
         return ""
 
-
-
-
-from pybiomart import Dataset
-import re
 
 def check_gene_symbols(x, unmapped_as_na=True, map=None, species="human"):
     if species == "human":
