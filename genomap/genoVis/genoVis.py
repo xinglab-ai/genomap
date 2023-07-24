@@ -9,7 +9,7 @@ from tensorflow.keras.optimizers import Adam
 from genomap.utils.ConvIDEC import ConvIDEC
 from sklearn.feature_selection import VarianceThreshold
 from genomap.genomap import construct_genomap
-import umap
+import umap.umap_ as umap
 from genomap.utils.gTraj_utils import nearest_divisible_by_four
 import scanpy as sc
 import numpy as np

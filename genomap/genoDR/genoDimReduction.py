@@ -9,7 +9,7 @@ import pandas as pd
 import scanpy as sc
 from sklearn.feature_selection import VarianceThreshold
 from tensorflow.keras.optimizers import Adam
-import umap
+import umap.umap_ as umap
 
 from genomap.genomap import construct_genomap
 from genomap.utils.ConvIDEC import ConvIDEC
