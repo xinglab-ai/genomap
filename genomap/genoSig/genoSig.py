@@ -6,7 +6,7 @@ from tensorflow.keras.utils import to_categorical
 
 def compute_genoSig(imageset,label, sig_class, epochs=100):
     # imageset contains the genomaps in shape (cellNum, rowNum, colNum, 1)
-    # label: numpy array of shape (cellNum, 1) containing the cell labels
+    # label: dataframe of shape (cellNum, 1) containing the cell labels
     # sig_class: numpy array containing the cell classes for which gene signatures will be computed
 
     n_clusters = len(np.unique(label))
