@@ -56,6 +56,8 @@ def createGenomap_for_sig(data,gene_names,rowNum=32,colNum=32):
     if nump<data.shape[1]:
         data,index=select_n_features(data,nump)
         gene_namesRe=gene_names[index]
+    else:
+        gene_namesRe=gene_names
       #  X_train=X_train[top_n_features]
     #ldaOutzc=scipy.stats.zscore(data, axis=0, ddof=1)    
     genoMaps,T=construct_genomap_returnT(data,rowNum,colNum,epsilon=0.0,num_iter=200)
