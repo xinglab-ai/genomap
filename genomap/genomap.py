@@ -137,7 +137,7 @@ def construct_genomap(data,rowNum,colNum,epsilon=0,num_iter=1000):
     px = np.asmatrix(projM)
 
     # Formation of genomaps from the projected data
-    for i in range(0, numCell-1):
+    for i in range(0, numCell):
         dx = px[i, :]
         fullVec = np.zeros((1,rowNum*colNum))
         fullVec[:dx.shape[0],:dx.shape[1]] = dx
